@@ -518,3 +518,153 @@ export const deleteMessage = /* GraphQL */ `
     }
   }
 `;
+export const createAudioMessage = /* GraphQL */ `
+  mutation CreateAudioMessage(
+    $input: CreateAudioMessageInput!
+    $condition: ModelaudioMessageConditionInput
+  ) {
+    createAudioMessage(input: $input, condition: $condition) {
+      id
+      createdAt
+      userID
+      chatRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          content
+          userID
+          chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      content {
+        bucket
+        region
+        key
+      }
+      updatedAt
+    }
+  }
+`;
+export const updateAudioMessage = /* GraphQL */ `
+  mutation UpdateAudioMessage(
+    $input: UpdateAudioMessageInput!
+    $condition: ModelaudioMessageConditionInput
+  ) {
+    updateAudioMessage(input: $input, condition: $condition) {
+      id
+      createdAt
+      userID
+      chatRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          content
+          userID
+          chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      content {
+        bucket
+        region
+        key
+      }
+      updatedAt
+    }
+  }
+`;
+export const deleteAudioMessage = /* GraphQL */ `
+  mutation DeleteAudioMessage(
+    $input: DeleteAudioMessageInput!
+    $condition: ModelaudioMessageConditionInput
+  ) {
+    deleteAudioMessage(input: $input, condition: $condition) {
+      id
+      createdAt
+      userID
+      chatRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          content
+          userID
+          chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      content {
+        bucket
+        region
+        key
+      }
+      updatedAt
+    }
+  }
+`;

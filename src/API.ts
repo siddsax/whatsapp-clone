@@ -217,6 +217,60 @@ export type DeleteMessageInput = {
   id: string,
 };
 
+export type CreateAudioMessageInput = {
+  id?: string | null,
+  createdAt?: string | null,
+  userID: string,
+  chatRoomID: string,
+  content?: S3ObjectInput | null,
+};
+
+export type S3ObjectInput = {
+  bucket: string,
+  region: string,
+  key: string,
+};
+
+export type ModelaudioMessageConditionInput = {
+  createdAt?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  chatRoomID?: ModelIDInput | null,
+  and?: Array< ModelaudioMessageConditionInput | null > | null,
+  or?: Array< ModelaudioMessageConditionInput | null > | null,
+  not?: ModelaudioMessageConditionInput | null,
+};
+
+export type audioMessage = {
+  __typename: "audioMessage",
+  id?: string,
+  createdAt?: string,
+  userID?: string,
+  chatRoomID?: string,
+  user?: User,
+  chatRoom?: ChatRoom,
+  content?: S3Object,
+  updatedAt?: string,
+};
+
+export type S3Object = {
+  __typename: "S3Object",
+  bucket?: string,
+  region?: string,
+  key?: string,
+};
+
+export type UpdateAudioMessageInput = {
+  id: string,
+  createdAt?: string | null,
+  userID?: string | null,
+  chatRoomID?: string | null,
+  content?: S3ObjectInput | null,
+};
+
+export type DeleteAudioMessageInput = {
+  id: string,
+};
+
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -265,6 +319,22 @@ export type ModelMessageFilterInput = {
   and?: Array< ModelMessageFilterInput | null > | null,
   or?: Array< ModelMessageFilterInput | null > | null,
   not?: ModelMessageFilterInput | null,
+};
+
+export type ModelaudioMessageFilterInput = {
+  id?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  chatRoomID?: ModelIDInput | null,
+  and?: Array< ModelaudioMessageFilterInput | null > | null,
+  or?: Array< ModelaudioMessageFilterInput | null > | null,
+  not?: ModelaudioMessageFilterInput | null,
+};
+
+export type ModelaudioMessageConnection = {
+  __typename: "ModelaudioMessageConnection",
+  items?:  Array<audioMessage | null > | null,
+  nextToken?: string | null,
 };
 
 export type ModelStringKeyConditionInput = {
@@ -886,6 +956,183 @@ export type DeleteMessageMutation = {
   } | null,
 };
 
+export type CreateAudioMessageMutationVariables = {
+  input?: CreateAudioMessageInput,
+  condition?: ModelaudioMessageConditionInput | null,
+};
+
+export type CreateAudioMessageMutation = {
+  createAudioMessage?:  {
+    __typename: "audioMessage",
+    id: string,
+    createdAt: string,
+    userID: string,
+    chatRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    chatRoom?:  {
+      __typename: "ChatRoom",
+      id: string,
+      chatRoomUsers?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      messages?:  {
+        __typename: "ModelMessageConnection",
+        nextToken?: string | null,
+      } | null,
+      lastMessageID: string,
+      lastMessage?:  {
+        __typename: "Message",
+        id: string,
+        createdAt: string,
+        content: string,
+        userID: string,
+        chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    content?:  {
+      __typename: "S3Object",
+      bucket: string,
+      region: string,
+      key: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateAudioMessageMutationVariables = {
+  input?: UpdateAudioMessageInput,
+  condition?: ModelaudioMessageConditionInput | null,
+};
+
+export type UpdateAudioMessageMutation = {
+  updateAudioMessage?:  {
+    __typename: "audioMessage",
+    id: string,
+    createdAt: string,
+    userID: string,
+    chatRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    chatRoom?:  {
+      __typename: "ChatRoom",
+      id: string,
+      chatRoomUsers?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      messages?:  {
+        __typename: "ModelMessageConnection",
+        nextToken?: string | null,
+      } | null,
+      lastMessageID: string,
+      lastMessage?:  {
+        __typename: "Message",
+        id: string,
+        createdAt: string,
+        content: string,
+        userID: string,
+        chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    content?:  {
+      __typename: "S3Object",
+      bucket: string,
+      region: string,
+      key: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteAudioMessageMutationVariables = {
+  input?: DeleteAudioMessageInput,
+  condition?: ModelaudioMessageConditionInput | null,
+};
+
+export type DeleteAudioMessageMutation = {
+  deleteAudioMessage?:  {
+    __typename: "audioMessage",
+    id: string,
+    createdAt: string,
+    userID: string,
+    chatRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    chatRoom?:  {
+      __typename: "ChatRoom",
+      id: string,
+      chatRoomUsers?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      messages?:  {
+        __typename: "ModelMessageConnection",
+        nextToken?: string | null,
+      } | null,
+      lastMessageID: string,
+      lastMessage?:  {
+        __typename: "Message",
+        id: string,
+        createdAt: string,
+        content: string,
+        userID: string,
+        chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    content?:  {
+      __typename: "S3Object",
+      bucket: string,
+      region: string,
+      key: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type GetUserQueryVariables = {
   id?: string,
 };
@@ -1221,6 +1468,107 @@ export type ListMessagesQuery = {
   } | null,
 };
 
+export type GetAudioMessageQueryVariables = {
+  id?: string,
+};
+
+export type GetAudioMessageQuery = {
+  getAudioMessage?:  {
+    __typename: "audioMessage",
+    id: string,
+    createdAt: string,
+    userID: string,
+    chatRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    chatRoom?:  {
+      __typename: "ChatRoom",
+      id: string,
+      chatRoomUsers?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      messages?:  {
+        __typename: "ModelMessageConnection",
+        nextToken?: string | null,
+      } | null,
+      lastMessageID: string,
+      lastMessage?:  {
+        __typename: "Message",
+        id: string,
+        createdAt: string,
+        content: string,
+        userID: string,
+        chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    content?:  {
+      __typename: "S3Object",
+      bucket: string,
+      region: string,
+      key: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListAudioMessagesQueryVariables = {
+  filter?: ModelaudioMessageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListAudioMessagesQuery = {
+  listAudioMessages?:  {
+    __typename: "ModelaudioMessageConnection",
+    items?:  Array< {
+      __typename: "audioMessage",
+      id: string,
+      createdAt: string,
+      userID: string,
+      chatRoomID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      chatRoom?:  {
+        __typename: "ChatRoom",
+        id: string,
+        lastMessageID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      content?:  {
+        __typename: "S3Object",
+        bucket: string,
+        region: string,
+        key: string,
+      } | null,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type MessagesByChatRoomQueryVariables = {
   chatRoomID?: string | null,
   createdAt?: ModelStringKeyConditionInput | null,
@@ -1255,6 +1603,52 @@ export type MessagesByChatRoomQuery = {
         lastMessageID: string,
         createdAt: string,
         updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type AudioMessagesByChatRoomQueryVariables = {
+  chatRoomID?: string | null,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelaudioMessageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type AudioMessagesByChatRoomQuery = {
+  audioMessagesByChatRoom?:  {
+    __typename: "ModelaudioMessageConnection",
+    items?:  Array< {
+      __typename: "audioMessage",
+      id: string,
+      createdAt: string,
+      userID: string,
+      chatRoomID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      chatRoom?:  {
+        __typename: "ChatRoom",
+        id: string,
+        lastMessageID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      content?:  {
+        __typename: "S3Object",
+        bucket: string,
+        region: string,
+        key: string,
       } | null,
       updatedAt: string,
     } | null > | null,
@@ -1800,6 +2194,168 @@ export type OnDeleteMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateAudioMessageSubscription = {
+  onCreateAudioMessage?:  {
+    __typename: "audioMessage",
+    id: string,
+    createdAt: string,
+    userID: string,
+    chatRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    chatRoom?:  {
+      __typename: "ChatRoom",
+      id: string,
+      chatRoomUsers?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      messages?:  {
+        __typename: "ModelMessageConnection",
+        nextToken?: string | null,
+      } | null,
+      lastMessageID: string,
+      lastMessage?:  {
+        __typename: "Message",
+        id: string,
+        createdAt: string,
+        content: string,
+        userID: string,
+        chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    content?:  {
+      __typename: "S3Object",
+      bucket: string,
+      region: string,
+      key: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateAudioMessageSubscription = {
+  onUpdateAudioMessage?:  {
+    __typename: "audioMessage",
+    id: string,
+    createdAt: string,
+    userID: string,
+    chatRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    chatRoom?:  {
+      __typename: "ChatRoom",
+      id: string,
+      chatRoomUsers?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      messages?:  {
+        __typename: "ModelMessageConnection",
+        nextToken?: string | null,
+      } | null,
+      lastMessageID: string,
+      lastMessage?:  {
+        __typename: "Message",
+        id: string,
+        createdAt: string,
+        content: string,
+        userID: string,
+        chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    content?:  {
+      __typename: "S3Object",
+      bucket: string,
+      region: string,
+      key: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteAudioMessageSubscription = {
+  onDeleteAudioMessage?:  {
+    __typename: "audioMessage",
+    id: string,
+    createdAt: string,
+    userID: string,
+    chatRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    chatRoom?:  {
+      __typename: "ChatRoom",
+      id: string,
+      chatRoomUsers?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      messages?:  {
+        __typename: "ModelMessageConnection",
+        nextToken?: string | null,
+      } | null,
+      lastMessageID: string,
+      lastMessage?:  {
+        __typename: "Message",
+        id: string,
+        createdAt: string,
+        content: string,
+        userID: string,
+        chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    content?:  {
+      __typename: "S3Object",
+      bucket: string,
+      region: string,
+      key: string,
     } | null,
     updatedAt: string,
   } | null,

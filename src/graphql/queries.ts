@@ -280,6 +280,90 @@ export const listMessages = /* GraphQL */ `
     }
   }
 `;
+export const getAudioMessage = /* GraphQL */ `
+  query GetAudioMessage($id: ID!) {
+    getAudioMessage(id: $id) {
+      id
+      createdAt
+      userID
+      chatRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          content
+          userID
+          chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      content {
+        bucket
+        region
+        key
+      }
+      updatedAt
+    }
+  }
+`;
+export const listAudioMessages = /* GraphQL */ `
+  query ListAudioMessages(
+    $filter: ModelaudioMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAudioMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        createdAt
+        userID
+        chatRoomID
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        chatRoom {
+          id
+          lastMessageID
+          createdAt
+          updatedAt
+        }
+        content {
+          bucket
+          region
+          key
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const messagesByChatRoom = /* GraphQL */ `
   query MessagesByChatRoom(
     $chatRoomID: ID
@@ -316,6 +400,53 @@ export const messagesByChatRoom = /* GraphQL */ `
           lastMessageID
           createdAt
           updatedAt
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const audioMessagesByChatRoom = /* GraphQL */ `
+  query AudioMessagesByChatRoom(
+    $chatRoomID: ID
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelaudioMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    audioMessagesByChatRoom(
+      chatRoomID: $chatRoomID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        createdAt
+        userID
+        chatRoomID
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        chatRoom {
+          id
+          lastMessageID
+          createdAt
+          updatedAt
+        }
+        content {
+          bucket
+          region
+          key
         }
         updatedAt
       }

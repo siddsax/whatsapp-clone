@@ -10,6 +10,7 @@ import {
   createChatRoomUser,
 } from "../../src/graphql/mutations";
 import { listChatRooms, getUser, getChatRoom } from "../../src/graphql/queries";
+import { useEffect, useState } from "react";
 
 export type ContactListItemProps = {
   user: User;
@@ -17,11 +18,14 @@ export type ContactListItemProps = {
 
 const ContactListItem = (props: ContactListItemProps) => {
   const { user } = props;
+  const [stateDisabled, setStateDisabled] = useState(false);
 
   const navigation = useNavigation();
 
   const onClick = async () => {
     try {
+      setStateDisabled(true);
+
       const userInfo = await Auth.currentAuthenticatedUser();
 
       const userFull = await API.graphql(
@@ -102,13 +106,15 @@ const ContactListItem = (props: ContactListItemProps) => {
         id: chatRoomID,
         name: "Hardcoded name",
       });
+      setStateDisabled(false);
     } catch (e) {
       console.log(e);
+      setStateDisabled(false);
     }
   };
 
   return (
-    <TouchableWithoutFeedback onPress={onClick}>
+    <TouchableWithoutFeedback onPress={onClick} disabled={stateDisabled}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
           <Image source={{ uri: user.imageUri }} style={styles.avatar} />

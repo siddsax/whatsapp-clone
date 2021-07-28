@@ -482,3 +482,144 @@ export const onDeleteMessage = /* GraphQL */ `
     }
   }
 `;
+export const onCreateAudioMessage = /* GraphQL */ `
+  subscription OnCreateAudioMessage {
+    onCreateAudioMessage {
+      id
+      createdAt
+      userID
+      chatRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          content
+          userID
+          chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      content {
+        bucket
+        region
+        key
+      }
+      updatedAt
+    }
+  }
+`;
+export const onUpdateAudioMessage = /* GraphQL */ `
+  subscription OnUpdateAudioMessage {
+    onUpdateAudioMessage {
+      id
+      createdAt
+      userID
+      chatRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          content
+          userID
+          chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      content {
+        bucket
+        region
+        key
+      }
+      updatedAt
+    }
+  }
+`;
+export const onDeleteAudioMessage = /* GraphQL */ `
+  subscription OnDeleteAudioMessage {
+    onDeleteAudioMessage {
+      id
+      createdAt
+      userID
+      chatRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      chatRoom {
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          content
+          userID
+          chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      content {
+        bucket
+        region
+        key
+      }
+      updatedAt
+    }
+  }
+`;
