@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
+    "@miblanchard/react-native-slider": "^1.5.0",
     "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "^6.0.0",
+    "@react-native-community/slider": "^3.0.3",
     "@react-navigation/bottom-tabs": "^5.8.0",
     "@react-navigation/material-top-tabs": "^5.2.19",
     "@react-navigation/native": "^5.7.3",
@@ -29,6 +31,7 @@
     "expo-constants": "~11.0.1",
     "expo-font": "~9.2.1",
     "expo-linking": "~2.3.1",
+    "expo-media-library": "~12.1.2",
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-web-browser": "~9.2.0",
@@ -36,12 +39,17 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native-audio-recorder-player": "^3.1.1",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
+    "react-native-sound": "^0.11.0",
+    "react-native-sound-player": "^0.11.0",
     "react-native-tab-view": "^2.15.2",
-    "react-native-web": "~0.13.12"
+    "react-native-vector-icons": "^8.1.0",
+    "react-native-web": "~0.13.12",
+    "recyclerlistview": "^3.0.5"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

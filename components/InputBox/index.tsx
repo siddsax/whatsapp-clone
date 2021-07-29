@@ -6,12 +6,17 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
 } from "react-native";
 import styles from "./styles";
 
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import { API, Auth, graphqlOperation, Storage } from "aws-amplify";
 
-import { createMessage, updateChatRoom } from "../../src/graphql/mutations";
+import {
+  createMessage,
+  updateChatRoom,
+  createAudioMessage,
+} from "../../src/graphql/mutations";
 
 import {
   MaterialCommunityIcons,
@@ -20,12 +25,15 @@ import {
   Entypo,
   Fontisto,
 } from "@expo/vector-icons";
+import { Audio } from "expo-av";
+import awsExports from "../../aws-exports";
 
 const InputBox = (props) => {
   const { chatRoomID } = props;
 
   const [message, setMessage] = useState("");
   const [myUserId, setMyUserId] = useState(null);
+  const [recording, setRecording] = useState();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,58 +43,118 @@ const InputBox = (props) => {
     fetchUser();
   }, []);
 
-  const onMicrophonePress = () => {
-    console.warn("Microphone");
-  };
+  // const onMicrophonePress = () => {
+  //   console.warn("Microphone");
+  // };
 
-  const updateChatRoomLastMessage = async (messageId: string) => {
+  const _onLongPress = async () => {
     try {
-      await API.graphql(
-        graphqlOperation(updateChatRoom, {
-          input: {
-            id: chatRoomID,
-            lastMessageID: messageId,
-          },
-        })
+      console.log("Requesting permissions..");
+      console.log("Starting recording..");
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(
+        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
       );
-      console.log("updateChatRoomLastMessage");
-      console.log(chatRoomID);
-      console.log("=============");
-    } catch (e) {
-      console.log(e);
+      await recording.startAsync();
+      setRecording(recording);
+      console.log("Recording started");
+    } catch (err) {
+      console.error("Failed to start recording", err);
     }
   };
-
-  const onSendPress = async () => {
+  const addAudioToDB = async (audioName) => {
+    const chatRoomID = "63b8045f-aec7-4083-ab2a-bb7f7531dab4";
     try {
       const newMessageData = await API.graphql(
-        graphqlOperation(createMessage, {
+        graphqlOperation(createAudioMessage, {
           input: {
-            content: message,
-            userID: myUserId,
-            chatRoomID,
+            content: {
+              bucket: awsExports.aws_user_files_s3_bucket,
+              region: awsExports.aws_user_files_s3_bucket_region,
+              key: audioName,
+            },
+            userID: "13131",
+            chatRoomID, // chatroomid
           },
         })
       );
       console.log("onSendPress");
-      console.log(chatRoomID);
+      console.log(chatRoomID); // chatroomid
       console.log("=============");
 
-      await updateChatRoomLastMessage(newMessageData.data.createMessage.id);
+      // await updateChatRoomLastMessage(newMessageData.data.createMessage.id);
     } catch (e) {
       console.log(e);
     }
-
-    setMessage("");
   };
 
-  const onPress = () => {
-    if (!message) {
-      onMicrophonePress();
-    } else {
-      onSendPress();
-    }
+  const _onPressOut = async () => {
+    console.log("Stopping recording..");
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    let recordingURI = recording.getURI();
+    const response = await fetch(recordingURI);
+    const blob = await response.blob();
+
+    console.log("Recording stopped and stored at", recordingURI);
+    // try {
+    //   const audioName = "name.caf";
+    //   await Storage.put(audioName, blob).then((result) => {
+    //     addAudioToDB(audioName);
+    //   });
+    // } catch (error) {
+    //   console.log("Error uploading file: ", error);
+    // }
   };
+
+  // const updateChatRoomLastMessage = async (messageId: string) => {
+  //   try {
+  //     await API.graphql(
+  //       graphqlOperation(updateChatRoom, {
+  //         input: {
+  //           id: chatRoomID,
+  //           lastMessageID: messageId,
+  //         },
+  //       })
+  //     );
+  //     console.log("updateChatRoomLastMessage");
+  //     console.log(chatRoomID);
+  //     console.log("=============");
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
+  // const onSendPress = async () => {
+  //   try {
+  //     const newMessageData = await API.graphql(
+  //       graphqlOperation(createMessage, {
+  //         input: {
+  //           content: message,
+  //           userID: myUserId,
+  //           chatRoomID,
+  //         },
+  //       })
+  //     );
+  //     console.log("onSendPress");
+  //     console.log(chatRoomID);
+  //     console.log("=============");
+
+  //     await updateChatRoomLastMessage(newMessageData.data.createMessage.id);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+
+  //   setMessage("");
+  // };
+
+  // const onPress = () => {
+  //   if (!message) {
+  //     onMicrophonePress();
+  //   } else {
+  //     onSendPress();
+  //   }
+  // };
 
   return (
     <KeyboardAvoidingView
@@ -95,7 +163,7 @@ const InputBox = (props) => {
       style={{ width: "100%" }}
     >
       <View style={styles.container}>
-        <View style={styles.mainContainer}>
+        {/* <View style={styles.mainContainer}>
           <FontAwesome5 name="laugh-beam" size={24} color="grey" />
           <TextInput
             placeholder={"Type a message"}
@@ -118,20 +186,24 @@ const InputBox = (props) => {
               style={styles.icon}
             />
           )}
-        </View>
-        <TouchableOpacity onPress={onPress}>
-          <View style={styles.buttonContainer}>
-            {!message ? (
-              <MaterialCommunityIcons
-                name="microphone"
-                size={28}
-                color="white"
-              />
-            ) : (
-              <MaterialIcons name="send" size={28} color="white" />
-            )}
-          </View>
-        </TouchableOpacity>
+        </View> */}
+        <Pressable
+          onLongPress={_onLongPress}
+          onPressOut={_onPressOut}
+          style={({ pressed }) => [
+            pressed
+              ? styles.buttonContainerPressed
+              : styles.buttonContainerUnPressed,
+          ]}
+        >
+          {/* <View style={styles.buttonContainer}> */}
+          {/* {!message ? ( */}
+          <MaterialCommunityIcons name="microphone" size={28} color="white" />
+          {/* ) : (
+            <MaterialIcons name="send" size={28} color="white" />
+          )} */}
+          {/* </View> */}
+        </Pressable>
       </View>
     </KeyboardAvoidingView>
   );
