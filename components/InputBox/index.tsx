@@ -63,7 +63,6 @@ const InputBox = (props) => {
     }
   };
   const addAudioToDB = async (audioName) => {
-    const chatRoomID = "63b8045f-aec7-4083-ab2a-bb7f7531dab4";
     try {
       const newMessageData = await API.graphql(
         graphqlOperation(createAudioMessage, {
@@ -73,8 +72,8 @@ const InputBox = (props) => {
               region: awsExports.aws_user_files_s3_bucket_region,
               key: audioName,
             },
-            userID: "13131",
-            chatRoomID, // chatroomid
+            userID: myUserId,
+            chatRoomID,
           },
         })
       );
@@ -97,14 +96,21 @@ const InputBox = (props) => {
     const blob = await response.blob();
 
     console.log("Recording stopped and stored at", recordingURI);
-    // try {
-    //   const audioName = "name.caf";
-    //   await Storage.put(audioName, blob).then((result) => {
-    //     addAudioToDB(audioName);
-    //   });
-    // } catch (error) {
-    //   console.log("Error uploading file: ", error);
-    // }
+    try {
+      const audioName = chatRoomID.concat(
+        "/",
+        myUserId,
+        "----",
+        Date.now(),
+        ".caf"
+      );
+      console.log(audioName);
+      await Storage.put(audioName, blob).then((result) => {
+        addAudioToDB(audioName);
+      });
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+    }
   };
 
   // const updateChatRoomLastMessage = async (messageId: string) => {
