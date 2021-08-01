@@ -9,7 +9,8 @@ import {
   createChatRoom,
   createChatRoomUser,
 } from "../../src/graphql/mutations";
-import { listChatRooms, getUser, getChatRoom } from "../../src/graphql/queries";
+import { getChatRoomUserID, getUserChatRoomNName } from "./queries";
+import { listChatRooms } from "../../src/graphql/queries";
 import { useEffect, useState } from "react";
 
 export type ContactListItemProps = {
@@ -19,48 +20,69 @@ export type ContactListItemProps = {
 const ContactListItem = (props: ContactListItemProps) => {
   const { user } = props;
   const [stateDisabled, setStateDisabled] = useState(false);
+  const [userInfo, setUserInfo] = useState();
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const authUser = async () => {
+      const userInfo = await Auth.currentAuthenticatedUser();
+
+      setUserInfo(userInfo);
+    };
+
+    authUser();
+  }, []);
 
   const onClick = async () => {
     try {
       setStateDisabled(true);
 
-      const userInfo = await Auth.currentAuthenticatedUser();
-
+      console.log("------- Start -----");
+      var chatRoomID = null;
       const userFull = await API.graphql(
-        graphqlOperation(getUser, { id: user.id })
+        graphqlOperation(getUserChatRoomNName, { id: user.id })
       );
+      const userChatRooms = userFull.data.getUser.chatRoomUser.items;
 
-      var chatRoomID = null;
+      // ################################################
+      // const testing = await API.graphql(
+      //   graphqlOperation(listChatRooms, {
+      //     filter: {
+      //       id: {
+      //         between: [
+      //           userChatRooms[1].chatRoomID,
+      //           userChatRooms[0].chatRoomID,
+      //         ],
+      //       },
+      //     },
+      //   })
+      // );
+      // console.log(testing);
+      // ################################################
 
-      console.log([user.id, userInfo.attributes.sub]);
-
-      const chatRooms = userFull.data.getUser.chatRoomUser.items;
-      var chatRoomID = null;
-
-      for (let i = 0; i < chatRooms.length; i++) {
+      console.log("------- End 1 -----");
+      for (let i = 0; i < userChatRooms.length; i++) {
         const chatRoom = await API.graphql(
-          graphqlOperation(getChatRoom, { id: chatRooms[i].chatRoomID })
+          graphqlOperation(getChatRoomUserID, {
+            id: userChatRooms[i].chatRoomID,
+          })
         );
         // Update the query afterwards to not get useless data
         var users = chatRoom.data.getChatRoom.chatRoomUsers.items;
         var flagOK = true;
         for (let j = 0; j < users.length; j++) {
           var userChat = users[j].userID;
-          console.log(userChat);
           if (userChat != user.id && userChat != userInfo.attributes.sub) {
             flagOK = false;
           }
         }
-        console.log(flagOK, chatRoomID);
-        console.log("--------");
         if (flagOK == true) {
-          chatRoomID = chatRooms[i].chatRoomID;
+          chatRoomID = userChatRooms[i].chatRoomID;
           break;
         }
       }
-      console.log(chatRoomID);
+      console.log("------- End -----");
 
       if (chatRoomID == null) {
         //  1. Create a new Chat Room
@@ -104,7 +126,8 @@ const ContactListItem = (props: ContactListItemProps) => {
 
       navigation.navigate("ChatRoom", {
         id: chatRoomID,
-        name: "Hardcoded name",
+        name: userFull.data.getUser.name,
+        myID: userInfo.attributes.sub,
       });
       setStateDisabled(false);
     } catch (e) {

@@ -4,7 +4,7 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { ColorSchemeName, View } from "react-native";
 import {
   Octicons,
@@ -20,6 +20,7 @@ import MainTabNavigator from "./MainTabNavigator";
 import LinkingConfiguration from "./LinkingConfiguration";
 import Colors from "../constants/Colors";
 import ContactsScreen from "../screens/ContactsScreen";
+import { Auth } from "aws-amplify";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -43,6 +44,15 @@ export default function Navigation({
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+  const [myId, setMyId] = useState(null);
+  useEffect(() => {
+    const getMyId = async () => {
+      const userInfo = await Auth.currentAuthenticatedUser();
+      setMyId(userInfo.attributes.sub);
+    };
+    getMyId();
+  }, []);
+
   return (
     <Stack.Navigator
       screenOptions={{

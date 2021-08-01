@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   View,
   Button,
+  ActivityIndicator,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { convertTime } from "../misc/helper";
@@ -24,9 +25,9 @@ import BG from "../assets/images/BG.png";
 import InputBox from "../components/InputBox";
 import { Audio, Video, AVPlaybackStatus } from "expo-av";
 
-const ChatRoomScreen = () => {
+const ChatRoomScreen = (props) => {
   const [messages, setMessages] = useState([]);
-  const [myId, setMyId] = useState(null);
+  const myID = props.route.params.myID;
 
   const route = useRoute();
   const [sound, setSound] = useState();
@@ -34,54 +35,67 @@ const ChatRoomScreen = () => {
     isLoaded: false,
     isPlaying: false,
     durationMillis: 0,
-    positionMillis: 0,
+    audioProgress: 0,
+    isBuffering: false,
   });
+  const [pendingMessageCount, setPendingMessageCount] = useState(0);
 
   const onPlaybackStatusUpdate = (inp) => {
+    console.log(inp);
     setStatus((prevState) => ({
       ...prevState,
       isLoaded: inp.isLoaded,
       isPlaying: inp.isPlaying,
       durationMillis: inp.durationMillis,
-      positionMillis: inp.positionMillis,
+      audioProgress: inp.positionMillis / inp.durationMillis,
+      isBuffering: inp.isBuffering,
     }));
-    console.log(inp);
-    console.log("------------");
   };
 
   const playMusic = async () => {
-    console.log("------------");
-    console.log(messages);
-    console.log(messages[0].content.key);
-    const uri = await Storage.get(messages[0].content.key);
-    console.log(uri);
+    try {
+      const uri = await Storage.get(messages[0].content.key);
+      setStatus((prevState) => ({
+        ...prevState,
+        isBuffering: true,
+      }));
 
-    await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
-    const { sound } = await Audio.Sound.createAsync({
-      uri: uri,
-      // uri: "file:///Users/siddharthasaxena/Library/Developer/CoreSimulator/Devices/BCD1A250-BEBF-43E3-91D0-CB4A59A0E0F1/data/Containers/Data/Application/C6EFA722-04E1-4172-A50D-C8C58E7F59C0/Library/Caches/ExponentExperienceData/%2540siddsax%252FWhatsappClone/AV/recording-504E9592-1FAC-4942-AFE3-D8E5B072BC7B.caf",
-      // uri: "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
-    });
-    sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
+      const { sound } = await Audio.Sound.createAsync({
+        uri: uri,
+      });
+      sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
 
-    setSound(sound);
+      setSound(sound);
 
-    await sound.playAsync();
+      await sound.playAsync();
+    } catch (e) {
+      console.log(e);
+      setStatus((prevState) => ({
+        ...prevState,
+        isBuffering: false,
+      }));
+    }
   };
 
   const pauseMusic = async () => {
     await sound.pauseAsync();
   };
 
-  // const onMoveSlider = async (val) => {
-  //   sound.playFromPositionAsync(val * status.durationMillis);
-  //   console.log("Moving slider");
-  // };
+  const onMoveSlider = async (val) => {
+    sound.playFromPositionAsync(val * status.durationMillis);
+    console.log("Moving slider");
+  };
+
   // useEffect(() => {
   //   return sound
   //     ? () => {
   //         console.log("Unloading Sound");
   //         sound.unloadAsync();
+  //         setStatus((prevState) => ({
+  //           ...prevState,
+  //           isBuffering: true,
+  //         }));
   //       }
   //     : undefined;
   // }, [sound]);
@@ -94,22 +108,23 @@ const ChatRoomScreen = () => {
       })
     );
     console.log("FETCH MESSAGES");
-    setMessages(messagesData.data.audioMessagesByChatRoom.items);
-    // setMessages(messagesData.data.messagesByChatRoom.items);
-    console.log(messagesData.data.audioMessagesByChatRoom.items);
-    console.log("+++++++++++");
+
+    var messages = messagesData.data.audioMessagesByChatRoom.items;
+    var messagesMine = [];
+    for (let i = 0; i < messages.length; i++) {
+      if (messages[i].userID == myID) {
+        messagesMine.push(messages[i]);
+      }
+    }
+    setMessages(messagesMine);
+    console.log("===============");
+    console.log(messagesMine[0]);
+    console.log("===============");
+    setPendingMessageCount(messagesMine.length);
   };
 
   useEffect(() => {
     fetchMessages();
-  }, []);
-
-  useEffect(() => {
-    const getMyId = async () => {
-      const userInfo = await Auth.currentAuthenticatedUser();
-      setMyId(userInfo.attributes.sub);
-    };
-    getMyId();
   }, []);
 
   useEffect(() => {
@@ -150,19 +165,31 @@ const ChatRoomScreen = () => {
         }}
       >
         <Text>
-          {status.positionMillis}/{status.durationMillis}
+          {status.durationMillis * status.audioProgress}/{status.durationMillis}
         </Text>
       </View>
 
-      {/* <Slider
+      <Slider
         style={{ width: 200, height: 40 }}
         minimumValue={0}
         maximumValue={1}
         minimumTrackTintColor="#FFFFFF"
         maximumTrackTintColor="#000000"
+        value={status.audioProgress}
         onValueChange={onMoveSlider}
-      /> */}
-      <Button onPress={playMusic} title="Play Music" />
+      />
+
+      <Text>Pending Messages {pendingMessageCount}</Text>
+      {status.isBuffering ? (
+        <Text>
+          <ActivityIndicator size="small" color="#0000ff" />
+        </Text>
+      ) : (
+        <Text>
+          <Button onPress={playMusic} title="Play Music" />
+        </Text>
+      )}
+
       <Button onPress={pauseMusic} title="Pause Music" />
 
       <InputBox chatRoomID={route.params.id} />
