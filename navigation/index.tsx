@@ -83,7 +83,7 @@ function RootNavigator() {
         name="Root"
         component={MainTabNavigator}
         options={{
-          title: "WhatsApp",
+          title: "MewTwo",
           headerRight: () => (
             <View
               style={{
@@ -147,11 +147,11 @@ function RootNavigator() {
         })}
       />
       <Stack.Screen name="Contacts" component={ContactsScreen} />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="NotFound"
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }

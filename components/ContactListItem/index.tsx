@@ -123,6 +123,7 @@ const ContactListItem = (props: ContactListItemProps) => {
 
         chatRoomID = newChatRoom.id;
       }
+      console.log(userFull.data);
 
       navigation.navigate("ChatRoom", {
         id: chatRoomID,

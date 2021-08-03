@@ -16,6 +16,7 @@ export const getUserChatRoomNName = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       name
+      imageUri
       chatRoomUser {
         items {
           chatRoomID
