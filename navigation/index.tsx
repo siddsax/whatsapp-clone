@@ -5,7 +5,17 @@ import {
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { ColorSchemeName, View } from "react-native";
+import {
+  ColorSchemeName,
+  View,
+  Text,
+  Button,
+  Image,
+  TouchableHighlight,
+  StyleSheet,
+} from "react-native";
+import { Icon } from "react-native-elements";
+
 import {
   Octicons,
   MaterialCommunityIcons,
@@ -21,6 +31,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import Colors from "../constants/Colors";
 import ContactsScreen from "../screens/ContactsScreen";
 import { Auth } from "aws-amplify";
+import { Dropdown } from "react-native-material-dropdown";
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -44,27 +55,27 @@ export default function Navigation({
 const Stack = createStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const [myId, setMyId] = useState(null);
-  useEffect(() => {
-    const getMyId = async () => {
-      const userInfo = await Auth.currentAuthenticatedUser();
-      setMyId(userInfo.attributes.sub);
-    };
-    getMyId();
-  }, []);
+  const signOut = () => {
+    Auth.signOut()
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
 
+  // Then in your render method.
+  //
   return (
     <Stack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors.light.tint,
+          backgroundColor: Colors.CREAM_TOP,
           shadowOpacity: 0,
           elevation: 0,
         },
-        headerTintColor: Colors.light.background,
+        headerTintColor: "black",
         headerTitleAlign: "left",
         headerTitleStyle: {
           fontWeight: "bold",
+          color: "black",
         },
       }}
     >
@@ -82,12 +93,26 @@ function RootNavigator() {
                 marginRight: 10,
               }}
             >
-              <Octicons name="search" size={22} color={"white"} />
-              <MaterialCommunityIcons
+              {/* <Octicons name="search" size={22} color={"white"} /> */}
+              <TouchableHighlight
+                onPress={signOut} // style={styles.btnClickContain}
+                underlayColor="#042417"
+              >
+                <View>
+                  <MaterialCommunityIcons
+                    // name="power-off"
+                    name="logout"
+                    size={22}
+                    color={"black"}
+                  />
+                </View>
+              </TouchableHighlight>
+
+              {/* <MaterialCommunityIcons
                 name="dots-vertical"
                 size={22}
                 color={"white"}
-              />
+              /> */}
             </View>
           ),
         }}
@@ -101,17 +126,21 @@ function RootNavigator() {
             <View
               style={{
                 flexDirection: "row",
-                width: 100,
-                justifyContent: "space-between",
+                // width: 100,
+                // justifyContent: "space-between",
                 marginRight: 10,
               }}
             >
-              <FontAwesome5 name="video" size={22} color={"white"} />
-              <MaterialIcons name="call" size={22} color={"white"} />
+              <Image
+                source={{ uri: route.params.imageUri }}
+                style={styles.image}
+              />
+              {/* <FontAwesome5 name="video" size={22} color={"black"} />
+              <MaterialIcons name="call" size={22} color={"black"} /> */}
               <MaterialCommunityIcons
                 name="dots-vertical"
                 size={22}
-                color={"white"}
+                color={"black"}
               />
             </View>
           ),
@@ -126,3 +155,17 @@ function RootNavigator() {
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  image: {
+    // justifyContent: "flex-start",
+    // flex: 1,
+    alignItems: "flex-start",
+    width: "120%",
+    height: "100%",
+    borderRadius: 150 / 2,
+    // overflow: "hidden",
+    borderWidth: 3,
+    borderColor: "black",
+  },
+});

@@ -128,6 +128,7 @@ const ContactListItem = (props: ContactListItemProps) => {
         id: chatRoomID,
         name: userFull.data.getUser.name,
         myID: userInfo.attributes.sub,
+        imageUri: userFull.data.getUser.imageUri,
       });
       setStateDisabled(false);
     } catch (e) {

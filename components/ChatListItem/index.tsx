@@ -31,10 +31,12 @@ const ChatListItem = (props: ChatListItemProps) => {
   }, []);
 
   const onClick = () => {
+    console.log("====================");
     navigation.navigate("ChatRoom", {
       id: chatRoom.id,
       name: otherUser.name,
       myID: thisUser,
+      imageUri: otherUser.imageUri,
     });
   };
 

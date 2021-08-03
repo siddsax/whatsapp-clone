@@ -28,6 +28,29 @@ import {
 import { Audio } from "expo-av";
 import awsExports from "../../aws-exports";
 
+const RecordingOptions = {
+  ios: {
+    extension: ".m4a",
+    outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+    audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_LOW,
+    sampleRate: 8000,
+    numberOfChannels: 1,
+    bitRateStrategy: 3,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+    bitRate: 64000,
+  },
+  android: {
+    extension: ".m4a",
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 128000,
+  },
+};
+
 const InputBox = (props) => {
   const { chatRoomID } = props;
 
@@ -52,9 +75,7 @@ const InputBox = (props) => {
       console.log("Requesting permissions..");
       console.log("Starting recording..");
       const recording = new Audio.Recording();
-      await recording.prepareToRecordAsync(
-        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
-      );
+      await recording.prepareToRecordAsync(RecordingOptions);
       await recording.startAsync();
       setRecording(recording);
       console.log("Recording started");
@@ -74,6 +95,7 @@ const InputBox = (props) => {
             },
             userID: myUserId,
             chatRoomID,
+            read: false,
           },
         })
       );
@@ -102,7 +124,7 @@ const InputBox = (props) => {
         myUserId,
         "----",
         Date.now(),
-        ".caf"
+        ".m4a"
       );
       console.log(audioName);
       await Storage.put(audioName, blob).then((result) => {

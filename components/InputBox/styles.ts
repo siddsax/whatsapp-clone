@@ -4,7 +4,7 @@ import Colors from "../../constants/Colors";
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    margin: 10,
+    // margin: 10,
     // alignItems: "flex-end",
     justifyContent: "center",
   },
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     width: 50,
     height: 50,
-    margin: 10,
+    // margin: 10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     width: 50,
     height: 50,
-    margin: 10,
+    // margin: 10,
     justifyContent: "center",
     alignItems: "center",
   },
