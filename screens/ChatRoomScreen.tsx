@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   FlatList,
   Text,
@@ -28,6 +28,7 @@ import {
   audioMessagesByChatRoom,
 } from "../src/graphql/queries";
 import { onCreateAudioMessage } from "../src/graphql/subscriptions";
+import { updateAudioMessage } from "../src/graphql/mutations";
 
 import ChatMessage from "../components/ChatMessage";
 import BG from "../assets/images/background.png";
@@ -48,11 +49,13 @@ const ChatRoomScreen = (props) => {
   const [pendingMessageCount, setPendingMessageCount] = useState(0);
   const [pace, setPace] = useState(1.0);
   const [buttonType, setButtonType] = useState("play");
-  var messageIndex = 0;
+
   const route = useRoute();
+  var messageIndex = useRef(-1);
 
   const sizeButtons = 30;
   const colorButtons = "white";
+
   const fetchMessages = async () => {
     const messagesData = await API.graphql(
       graphqlOperation(audioMessagesByChatRoom, {
@@ -64,15 +67,29 @@ const ChatRoomScreen = (props) => {
 
     var messages = messagesData.data.audioMessagesByChatRoom.items;
     var messagesMine = [];
+    // Remove messages that are not sent by me or Read
     for (let i = 0; i < messages.length; i++) {
       if (messages[i].userID == myID) {
         messagesMine.push(messages[i]);
       }
     }
+    messagesMine.sort(
+      (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
+    );
+
+    for (let i = 0; i < messagesMine.length; i++) {
+      if (messagesMine[i].read == false) {
+        messageIndex.current = i;
+        break;
+      }
+    }
+    if (messageIndex.current == -1) {
+      // All messages have been read
+      messageIndex.current = messagesMine.length;
+      console.log(messageIndex.current);
+    }
+
     setMessages(messagesMine);
-    // console.log("===============");
-    // console.log(messagesMine[0]);
-    // console.log("===============");
     setPendingMessageCount(messagesMine.length);
   };
 
@@ -111,13 +128,15 @@ const ChatRoomScreen = (props) => {
     }
   };
   const playMusic = async () => {
-    if (messageIndex < pendingMessageCount) {
+    if (messageIndex.current < pendingMessageCount) {
       try {
         setStatus((prevState) => ({
           ...prevState,
           isBuffering: true,
         }));
-        const uri = await Storage.get(messages[messageIndex].content.key);
+        const uri = await Storage.get(
+          messages[messageIndex.current].content.key
+        );
 
         await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
         const { sound } = await Audio.Sound.createAsync({
@@ -130,7 +149,6 @@ const ChatRoomScreen = (props) => {
 
         await sound.playAsync();
       } catch (e) {
-        console.log(e);
         setStatus((prevState) => ({
           ...prevState,
           isBuffering: false,
@@ -163,20 +181,32 @@ const ChatRoomScreen = (props) => {
       }));
     }
     if (inp.didJustFinish) {
-      messageIndex = messageIndex + 1;
+      messages[messageIndex.current];
+      // update in the data base that this has been read
+      await API.graphql(
+        graphqlOperation(updateAudioMessage, {
+          input: {
+            id: messages[messageIndex.current].id,
+            read: true,
+          },
+        })
+      );
+      messageIndex.current = messageIndex.current + 1;
+      // setMessageIndex(messageIndex + 1);
+
       await playMusic();
     }
   };
 
   const nextMessage = async () => {
-    messageIndex = messageIndex + 1;
+    messageIndex.current = messageIndex.current + 1;
     await sound.stopAsync();
     playMusic();
   };
 
   const lastMessage = async () => {
-    if (messageIndex > 0) {
-      messageIndex = messageIndex - 1;
+    if (messageIndex.current > 0) {
+      messageIndex.current = messageIndex.current - 1;
       await sound.stopAsync();
       playMusic();
     }
@@ -196,7 +226,6 @@ const ChatRoomScreen = (props) => {
   useEffect(() => {
     return sound
       ? () => {
-          console.log("Unloading Sound");
           sound.unloadAsync();
           setStatus((prevState) => ({
             ...prevState,

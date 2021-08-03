@@ -222,6 +222,7 @@ export type CreateAudioMessageInput = {
   createdAt?: string | null,
   userID: string,
   chatRoomID: string,
+  read?: boolean | null,
   content?: S3ObjectInput | null,
 };
 
@@ -235,9 +236,17 @@ export type ModelaudioMessageConditionInput = {
   createdAt?: ModelStringInput | null,
   userID?: ModelIDInput | null,
   chatRoomID?: ModelIDInput | null,
+  read?: ModelBooleanInput | null,
   and?: Array< ModelaudioMessageConditionInput | null > | null,
   or?: Array< ModelaudioMessageConditionInput | null > | null,
   not?: ModelaudioMessageConditionInput | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
 };
 
 export type audioMessage = {
@@ -248,6 +257,7 @@ export type audioMessage = {
   chatRoomID?: string,
   user?: User,
   chatRoom?: ChatRoom,
+  read?: boolean | null,
   content?: S3Object,
   updatedAt?: string,
 };
@@ -264,6 +274,7 @@ export type UpdateAudioMessageInput = {
   createdAt?: string | null,
   userID?: string | null,
   chatRoomID?: string | null,
+  read?: boolean | null,
   content?: S3ObjectInput | null,
 };
 
@@ -326,6 +337,7 @@ export type ModelaudioMessageFilterInput = {
   createdAt?: ModelStringInput | null,
   userID?: ModelIDInput | null,
   chatRoomID?: ModelIDInput | null,
+  read?: ModelBooleanInput | null,
   and?: Array< ModelaudioMessageFilterInput | null > | null,
   or?: Array< ModelaudioMessageFilterInput | null > | null,
   not?: ModelaudioMessageFilterInput | null,
@@ -1005,6 +1017,7 @@ export type CreateAudioMessageMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    read?: boolean | null,
     content?:  {
       __typename: "S3Object",
       bucket: string,
@@ -1064,6 +1077,7 @@ export type UpdateAudioMessageMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    read?: boolean | null,
     content?:  {
       __typename: "S3Object",
       bucket: string,
@@ -1123,6 +1137,7 @@ export type DeleteAudioMessageMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    read?: boolean | null,
     content?:  {
       __typename: "S3Object",
       bucket: string,
@@ -1516,6 +1531,7 @@ export type GetAudioMessageQuery = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    read?: boolean | null,
     content?:  {
       __typename: "S3Object",
       bucket: string,
@@ -1557,6 +1573,7 @@ export type ListAudioMessagesQuery = {
         createdAt: string,
         updatedAt: string,
       } | null,
+      read?: boolean | null,
       content?:  {
         __typename: "S3Object",
         bucket: string,
@@ -1644,6 +1661,7 @@ export type AudioMessagesByChatRoomQuery = {
         createdAt: string,
         updatedAt: string,
       } | null,
+      read?: boolean | null,
       content?:  {
         __typename: "S3Object",
         bucket: string,
@@ -2243,6 +2261,7 @@ export type OnCreateAudioMessageSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    read?: boolean | null,
     content?:  {
       __typename: "S3Object",
       bucket: string,
@@ -2297,6 +2316,7 @@ export type OnUpdateAudioMessageSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    read?: boolean | null,
     content?:  {
       __typename: "S3Object",
       bucket: string,
@@ -2351,6 +2371,7 @@ export type OnDeleteAudioMessageSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    read?: boolean | null,
     content?:  {
       __typename: "S3Object",
       bucket: string,

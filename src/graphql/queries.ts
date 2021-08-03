@@ -318,6 +318,7 @@ export const getAudioMessage = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      read
       content {
         bucket
         region
@@ -353,6 +354,7 @@ export const listAudioMessages = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        read
         content {
           bucket
           region
@@ -443,6 +445,7 @@ export const audioMessagesByChatRoom = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        read
         content {
           bucket
           region

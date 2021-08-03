@@ -559,6 +559,7 @@ export const createAudioMessage = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      read
       content {
         bucket
         region
@@ -609,6 +610,7 @@ export const updateAudioMessage = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      read
       content {
         bucket
         region
@@ -659,6 +661,7 @@ export const deleteAudioMessage = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      read
       content {
         bucket
         region
