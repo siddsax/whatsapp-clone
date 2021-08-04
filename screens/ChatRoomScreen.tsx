@@ -34,6 +34,7 @@ import ChatMessage from "../components/ChatMessage";
 import BG from "../assets/images/background.png";
 import InputBox from "../components/InputBox";
 import { Audio, Video, AVPlaybackStatus } from "expo-av";
+import Colors from "../constants/Colors";
 
 const ChatRoomScreen = (props) => {
   const [messages, setMessages] = useState([]);
@@ -48,7 +49,7 @@ const ChatRoomScreen = (props) => {
   });
   const [pace, setPace] = useState(1.0);
   const [buttonType, setButtonType] = useState("play");
-
+  const [flashMessage, setFlashMessage] = useState("Idle");
   const route = useRoute();
   var messageIndex = useRef(-1);
 
@@ -103,7 +104,7 @@ const ChatRoomScreen = (props) => {
         console.log("Subscribed!!!");
         const newMessage = data.value.data.onCreateAudioMessage;
 
-        if (newMessage.chatRoomID !== route.params.id) {
+        if (newMessage.chatRoomID == route.params.id) {
           console.log("Message is in another room!");
           return;
         }
@@ -237,6 +238,19 @@ const ChatRoomScreen = (props) => {
       : undefined;
   }, [sound]);
 
+  useEffect(() => {
+    console.log("----------", flashMessage, "----------");
+    if (flashMessage == "Recording") {
+      console.log("Recording");
+    } else if (flashMessage == "Sending") {
+      console.log("sending");
+    } else if (flashMessage == "Sent") {
+      console.log("Sent");
+    } else {
+      console.log("Idle");
+    }
+  }, [flashMessage]);
+
   return (
     <ImageBackground style={{ width: "100%", height: "100%" }} source={BG}>
       {/* <FlatList
@@ -275,6 +289,15 @@ const ChatRoomScreen = (props) => {
        */}
       <View style={styles.clubhousePics}>
         <Image source={{ uri: route.params.imageUri }} style={styles.image} />
+      </View>
+      <View>
+        {flashMessage != "Idle" ? (
+          <View style={styles.statusPopUp}>
+            <Text style={styles.flashMessageStyle}>{flashMessage}</Text>
+          </View>
+        ) : (
+          <Text></Text>
+        )}
       </View>
       <View style={styles.audioNavigation}>
         <TouchableHighlight
@@ -337,7 +360,10 @@ const ChatRoomScreen = (props) => {
 
         {/* <Button onPress={changePace} title="change pace" /> */}
         <View style={styles.recordButton}>
-          <InputBox chatRoomID={route.params.id} />
+          <InputBox
+            chatRoomID={route.params.id}
+            setFlashMessage={setFlashMessage}
+          />
         </View>
       </View>
     </ImageBackground>
@@ -395,5 +421,20 @@ const styles = StyleSheet.create({
   },
   goAhead: {
     marginLeft: "20%",
+  },
+  statusPopUp: {
+    opacity: 0.5,
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+    fontWeight: "bold",
+    backgroundColor: Colors.CREAM_TOP,
+    marginLeft: "30%",
+    marginRight: "30%",
+    marginBottom: 10,
+  },
+  flashMessageStyle: {
+    fontWeight: "bold",
+    color: "black",
   },
 });

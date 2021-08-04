@@ -27,6 +27,7 @@ import {
 } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import awsExports from "../../aws-exports";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const RecordingOptions = {
   ios: {
@@ -52,7 +53,7 @@ const RecordingOptions = {
 };
 
 const InputBox = (props) => {
-  const { chatRoomID } = props;
+  const { chatRoomID, setFlashMessage } = props;
 
   const [message, setMessage] = useState("");
   const [myUserId, setMyUserId] = useState(null);
@@ -77,6 +78,7 @@ const InputBox = (props) => {
         playsInSilentModeIOS: true,
       });
       console.log("Starting recording..");
+      setFlashMessage("Recording");
       const recording = new Audio.Recording();
       await recording.prepareToRecordAsync(RecordingOptions);
       await recording.startAsync();
@@ -121,6 +123,9 @@ const InputBox = (props) => {
     const blob = await response.blob();
 
     console.log("Recording stopped and stored at", recordingURI);
+
+    console.log("Message");
+
     try {
       const audioName = chatRoomID.concat(
         "/",
@@ -130,62 +135,19 @@ const InputBox = (props) => {
         ".m4a"
       );
       console.log(audioName);
+
+      setFlashMessage("Sending");
       await Storage.put(audioName, blob).then((result) => {
+        setFlashMessage("Sent");
         addAudioToDB(audioName);
+        setTimeout(() => {
+          setFlashMessage("Idle");
+        }, 1000);
       });
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
   };
-
-  // const updateChatRoomLastMessage = async (messageId: string) => {
-  //   try {
-  //     await API.graphql(
-  //       graphqlOperation(updateChatRoom, {
-  //         input: {
-  //           id: chatRoomID,
-  //           lastMessageID: messageId,
-  //         },
-  //       })
-  //     );
-  //     console.log("updateChatRoomLastMessage");
-  //     console.log(chatRoomID);
-  //     console.log("=============");
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // const onSendPress = async () => {
-  //   try {
-  //     const newMessageData = await API.graphql(
-  //       graphqlOperation(createMessage, {
-  //         input: {
-  //           content: message,
-  //           userID: myUserId,
-  //           chatRoomID,
-  //         },
-  //       })
-  //     );
-  //     console.log("onSendPress");
-  //     console.log(chatRoomID);
-  //     console.log("=============");
-
-  //     await updateChatRoomLastMessage(newMessageData.data.createMessage.id);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-
-  //   setMessage("");
-  // };
-
-  // const onPress = () => {
-  //   if (!message) {
-  //     onMicrophonePress();
-  //   } else {
-  //     onSendPress();
-  //   }
-  // };
 
   return (
     <KeyboardAvoidingView
@@ -194,30 +156,6 @@ const InputBox = (props) => {
       style={{ width: "100%" }}
     >
       <View style={styles.container}>
-        {/* <View style={styles.mainContainer}>
-          <FontAwesome5 name="laugh-beam" size={24} color="grey" />
-          <TextInput
-            placeholder={"Type a message"}
-            style={styles.textInput}
-            multiline
-            value={message}
-            onChangeText={setMessage}
-          />
-          <Entypo
-            name="attachment"
-            size={24}
-            color="grey"
-            style={styles.icon}
-          />
-          {!message && (
-            <Fontisto
-              name="camera"
-              size={24}
-              color="grey"
-              style={styles.icon}
-            />
-          )}
-        </View> */}
         <Pressable
           onLongPress={_onLongPress}
           onPressOut={_onPressOut}
@@ -227,13 +165,7 @@ const InputBox = (props) => {
               : styles.buttonContainerUnPressed,
           ]}
         >
-          {/* <View style={styles.buttonContainer}> */}
-          {/* {!message ? ( */}
           <MaterialCommunityIcons name="microphone" size={28} color="white" />
-          {/* ) : (
-            <MaterialIcons name="send" size={28} color="white" />
-          )} */}
-          {/* </View> */}
         </Pressable>
       </View>
     </KeyboardAvoidingView>
