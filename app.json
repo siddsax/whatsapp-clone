@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "WhatsappClone",
-    "slug": "WhatsappClone",
+    "name": "MewTwo",
+    "slug": "MewTwo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,14 +15,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "android": {
+      "package": "com.BakaiTech.MewTwo",
+      "versionCode": 1
     }
   }
 }
