@@ -13,6 +13,11 @@ import { createUser } from "./src/graphql/mutations";
 import { withAuthenticator } from "aws-amplify-react-native";
 import Amplify from "aws-amplify";
 import config from "./aws-exports";
+import { Audio } from "expo-av";
+import * as Permissions from "expo-permissions";
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Setting a timer"]);
+
 // Amplify.configure(config)
 Amplify.configure({
   ...config,
@@ -37,6 +42,15 @@ function App() {
 
   // run this snippet only when App is first mounted
   useEffect(() => {
+    const askAudioPermission = async () => {
+      const permission = await Audio.getPermissionsAsync();
+      console.log(permission);
+      if (!permission.granted) {
+        alert("Hey! You have not enabled selected permissions");
+        await Audio.requestPermissionsAsync();
+      }
+    };
+
     const fetchUser = async () => {
       const userInfo = await Auth.currentAuthenticatedUser({
         bypassCache: true,
@@ -63,6 +77,7 @@ function App() {
       }
     };
 
+    askAudioPermission();
     fetchUser();
   }, []);
 

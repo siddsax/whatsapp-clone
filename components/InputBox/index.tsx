@@ -72,7 +72,10 @@ const InputBox = (props) => {
 
   const _onLongPress = async () => {
     try {
-      console.log("Requesting permissions..");
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
       console.log("Starting recording..");
       const recording = new Audio.Recording();
       await recording.prepareToRecordAsync(RecordingOptions);

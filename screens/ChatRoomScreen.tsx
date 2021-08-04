@@ -46,7 +46,6 @@ const ChatRoomScreen = (props) => {
     audioProgress: 0,
     isBuffering: false,
   });
-  const [pendingMessageCount, setPendingMessageCount] = useState(0);
   const [pace, setPace] = useState(1.0);
   const [buttonType, setButtonType] = useState("play");
 
@@ -90,7 +89,6 @@ const ChatRoomScreen = (props) => {
     }
 
     setMessages(messagesMine);
-    setPendingMessageCount(messagesMine.length);
   };
 
   useEffect(() => {
@@ -102,6 +100,7 @@ const ChatRoomScreen = (props) => {
       graphqlOperation(onCreateAudioMessage)
     ).subscribe({
       next: (data) => {
+        console.log("Subscribed!!!");
         const newMessage = data.value.data.onCreateAudioMessage;
 
         if (newMessage.chatRoomID !== route.params.id) {
@@ -118,7 +117,8 @@ const ChatRoomScreen = (props) => {
   ///////////////////////////////// While Playing /////////////////////////////////
   const changeMusicState = async () => {
     if (buttonType == "play") {
-      if (status.audioProgress == 0) {
+      console.log(status.audioProgress);
+      if (status.audioProgress == 0 || status.audioProgress == 1) {
         await playMusic();
       } else {
         await sound.playAsync();
@@ -128,7 +128,9 @@ const ChatRoomScreen = (props) => {
     }
   };
   const playMusic = async () => {
-    if (messageIndex.current < pendingMessageCount) {
+    console.log("***************");
+    console.log(messageIndex.current, messages.length);
+    if (messageIndex.current < messages.length) {
       try {
         setStatus((prevState) => ({
           ...prevState,
