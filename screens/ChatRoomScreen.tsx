@@ -35,6 +35,10 @@ import BG from "../assets/images/background.png";
 import InputBox from "../components/InputBox";
 import { Audio, Video, AVPlaybackStatus } from "expo-av";
 import Colors from "../constants/Colors";
+import { stat } from "fs";
+// import { Picker } from "@react-native-picker/picker";
+import DropDownPicker from "react-native-dropdown-picker";
+import { colors } from "react-native-elements";
 
 const ChatRoomScreen = (props) => {
   const [messages, setMessages] = useState([]);
@@ -47,11 +51,20 @@ const ChatRoomScreen = (props) => {
     audioProgress: 0,
     isBuffering: false,
   });
-  const [pace, setPace] = useState(1.0);
+  // const [pace, setPace] = useState(1.0);
   const [buttonType, setButtonType] = useState("play");
   const [flashMessage, setFlashMessage] = useState("Idle");
   const route = useRoute();
   var messageIndex = useRef(-1);
+  var pace = useRef(1.0);
+  // var messages = useRef([]);
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "1X", value: 1 },
+    { label: "2X", value: 2 },
+  ]);
 
   const sizeButtons = 30;
   const colorButtons = "white";
@@ -65,12 +78,13 @@ const ChatRoomScreen = (props) => {
     );
     console.log("FETCH MESSAGES");
 
-    var messages = messagesData.data.audioMessagesByChatRoom.items;
+    var allChatRoomMessages = messagesData.data.audioMessagesByChatRoom.items;
     var messagesMine = [];
+
     // Remove messages that are not sent by me or Read
-    for (let i = 0; i < messages.length; i++) {
-      if (messages[i].userID !== myID) {
-        messagesMine.push(messages[i]);
+    for (let i = 0; i < allChatRoomMessages.length; i++) {
+      if (allChatRoomMessages[i].userID == myID) {
+        messagesMine.push(allChatRoomMessages[i]);
       }
     }
     messagesMine.sort(
@@ -89,12 +103,20 @@ const ChatRoomScreen = (props) => {
       console.log(messageIndex.current);
     }
 
+    console.log(status.isLoaded, status.isBuffering, status.isPlaying);
     setMessages(messagesMine);
   };
 
   useEffect(() => {
     fetchMessages();
   }, []);
+
+  useEffect(() => {
+    if (!status.isPlaying && !status.isBuffering && flashMessage == "Idle") {
+      console.log("inside");
+      playMusic();
+    }
+  }, [messages, flashMessage]);
 
   useEffect(() => {
     const subscription = API.graphql(
@@ -146,7 +168,7 @@ const ChatRoomScreen = (props) => {
           uri: uri,
         });
         sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-        sound.setRateAsync(pace, true);
+        sound.setRateAsync(pace.current, true);
 
         setSound(sound);
 
@@ -215,14 +237,20 @@ const ChatRoomScreen = (props) => {
     }
   };
 
+  // useEffect(() => {
+  //   sound.setReateAsync(pace.current, true);
+  // }, [pace])
+
   const changePace = async () => {
-    if (pace == 1) {
-      sound.setRateAsync(2, true);
-      setPace(2);
-    } else {
-      setPace(1);
-      sound.setRateAsync(1, true);
-    }
+    console.log("Changing Pace");
+    // sound.setReateAsync(pace.current, true);
+    // if (pace == 1) {
+    //   sound.setRateAsync(2, true);
+    //   setPace(2);
+    // } else {
+    //   setPace(1);
+    //   sound.setRateAsync(1, true);
+    // }
   };
   ///////////////////////////////// While Playing /////////////////////////////////
 
@@ -308,7 +336,7 @@ const ChatRoomScreen = (props) => {
           <View>
             <MaterialCommunityIcons
               // name="power-off"
-              name="skip-backward"
+              name="skip-previous"
               size={sizeButtons}
               color={colorButtons}
             />
@@ -344,9 +372,9 @@ const ChatRoomScreen = (props) => {
       </View>
 
       <View style={styles.bottomBar}>
-        <TouchableHighlight>
-          <Text style={styles.paceBar}>{pace}X</Text>
-        </TouchableHighlight>
+        {/* <TouchableHighlight>
+          <Text style={styles.paceBar}>{pace.current}X</Text>
+        </TouchableHighlight> */}
 
         <Slider
           style={styles.slider}
