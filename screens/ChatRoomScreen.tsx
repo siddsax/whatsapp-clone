@@ -23,22 +23,18 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 
-import {
-  messagesByChatRoom,
-  audioMessagesByChatRoom,
-} from "../src/graphql/queries";
+import { audioMessagesByChatRoom } from "../src/graphql/queries";
 import { onCreateAudioMessage } from "../src/graphql/subscriptions";
 import { updateAudioMessage } from "../src/graphql/mutations";
 
-import ChatMessage from "../components/ChatMessage";
 import BG from "../assets/images/background.png";
 import InputBox from "../components/InputBox";
 import { Audio, Video, AVPlaybackStatus } from "expo-av";
 import Colors from "../constants/Colors";
-import { stat } from "fs";
-// import { Picker } from "@react-native-picker/picker";
-import DropDownPicker from "react-native-dropdown-picker";
-import { colors } from "react-native-elements";
+import { Dimensions } from "react-native";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const ChatRoomScreen = (props) => {
   const [messages, setMessages] = useState([]);
@@ -54,6 +50,7 @@ const ChatRoomScreen = (props) => {
   // const [pace, setPace] = useState(1.0);
   const [buttonType, setButtonType] = useState("play");
   const [flashMessage, setFlashMessage] = useState("Idle");
+  const [pendingMessageCount, setPendingMessageCount] = useState(0);
   const route = useRoute();
   var messageIndex = useRef(-1);
   var pace = useRef(1.0);
@@ -104,6 +101,7 @@ const ChatRoomScreen = (props) => {
     }
 
     console.log(status.isLoaded, status.isBuffering, status.isPlaying);
+    setPendingMessageCount(messagesMine.length - messageIndex.current);
     setMessages(messagesMine);
   };
 
@@ -206,8 +204,6 @@ const ChatRoomScreen = (props) => {
       }));
     }
     if (inp.didJustFinish) {
-      messages[messageIndex.current];
-      // update in the data base that this has been read
       await API.graphql(
         graphqlOperation(updateAudioMessage, {
           input: {
@@ -217,8 +213,7 @@ const ChatRoomScreen = (props) => {
         })
       );
       messageIndex.current = messageIndex.current + 1;
-      // setMessageIndex(messageIndex + 1);
-
+      setPendingMessageCount(messagesMine.length - messageIndex.current);
       await playMusic();
     }
   };
@@ -315,8 +310,18 @@ const ChatRoomScreen = (props) => {
       <Button onPress={pauseMusic} title="Pause Music" />
       
        */}
+
       <View style={styles.clubhousePics}>
         <Image source={{ uri: route.params.imageUri }} style={styles.image} />
+        {pendingMessageCount > 0 ? (
+          <View style={styles.pendingMessages}>
+            <Text style={styles.pendingMessagesText}>
+              {pendingMessageCount}
+            </Text>
+          </View>
+        ) : (
+          <Text></Text>
+        )}
       </View>
       <View>
         {flashMessage != "Idle" ? (
@@ -401,16 +406,35 @@ const ChatRoomScreen = (props) => {
 export default ChatRoomScreen;
 
 const styles = StyleSheet.create({
+  pendingMessages: {
+    backgroundColor: "red",
+    width: windowWidth * 0.06,
+    height: windowWidth * 0.06,
+    borderRadius: windowWidth * 0.03,
+    left: windowWidth * 0.07,
+    top: -windowWidth * 0.2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pendingMessagesText: {
+    fontWeight: "bold",
+  },
   image: {
     // justifyContent: "flex-start",
     // flex: 1,
     alignItems: "flex-start",
-    width: "40%",
-    height: "20%",
-    borderRadius: 150 / 2,
+    width: windowWidth * 0.2, //"20%",
+    height: windowWidth * 0.2, //"10%",
+    borderRadius: windowWidth * 0.1,
     // overflow: "hidden",
     borderWidth: 3,
     borderColor: "black",
+  },
+  clubhousePics: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "red",
   },
   slider: { width: "70%", height: 40, marginBottom: 5 },
   bottomBar: {
@@ -436,12 +460,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // alignItems: "flex-end",
-  },
-  clubhousePics: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: "red",
   },
   goBack: {
     // flex: 1,
