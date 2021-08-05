@@ -83,7 +83,7 @@ const ChatRoomScreen = (props) => {
 
     // Remove messages that are not sent by me or Read
     for (let i = 0; i < allChatRoomMessages.length; i++) {
-      if (allChatRoomMessages[i].userID == myID) {
+      if (allChatRoomMessages[i].userID !== myID) {
         messagesMine.push(allChatRoomMessages[i]);
       }
     }
