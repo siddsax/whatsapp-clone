@@ -88,6 +88,21 @@ const InputBox = (props) => {
       console.error("Failed to start recording", err);
     }
   };
+
+  const updateChatRoomLastMessage = async (messageId: string) => {
+    try {
+      await API.graphql(
+        graphqlOperation(updateChatRoom, {
+          input: {
+            id: chatRoomID,
+            lastMessageID: messageId,
+          },
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const addAudioToDB = async (audioName) => {
     try {
       const newMessageData = await API.graphql(
@@ -104,11 +119,9 @@ const InputBox = (props) => {
           },
         })
       );
-      console.log("onSendPress");
-      console.log(chatRoomID); // chatroomid
-      console.log("=============");
-
-      // await updateChatRoomLastMessage(newMessageData.data.createMessage.id);
+      await updateChatRoomLastMessage(
+        newMessageData.data.createAudioMessage.id
+      );
     } catch (e) {
       console.log(e);
     }
@@ -123,8 +136,6 @@ const InputBox = (props) => {
     const blob = await response.blob();
 
     console.log("Recording stopped and stored at", recordingURI);
-
-    console.log("Message");
 
     try {
       const audioName = chatRoomID.concat(

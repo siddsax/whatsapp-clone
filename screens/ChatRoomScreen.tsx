@@ -70,7 +70,6 @@ const ChatRoomScreen = (props) => {
     const messagesData = await API.graphql(
       graphqlOperation(audioMessagesByChatRoom, {
         chatRoomID: route.params.id,
-        sortDirection: "DESC",
       })
     );
     console.log("FETCH MESSAGES");
@@ -213,7 +212,7 @@ const ChatRoomScreen = (props) => {
         })
       );
       messageIndex.current = messageIndex.current + 1;
-      setPendingMessageCount(messagesMine.length - messageIndex.current);
+      setPendingMessageCount(messages.length - messageIndex.current);
       await playMusic();
     }
   };

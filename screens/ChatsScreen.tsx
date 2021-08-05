@@ -15,6 +15,10 @@ export default function ChatsScreen() {
   const [chatRooms, setChatRooms] = useState([]);
   const isFocused = useIsFocused();
   const [chatRoomCount, setChatRoomCount] = useState(1);
+
+  const propertyRetriever = (inp) => {
+    return Date.parse(inp.chatRoom.lastMessage.updatedAt);
+  };
   const fetchChatRooms = async () => {
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
@@ -22,11 +26,28 @@ export default function ChatsScreen() {
       const userData = await API.graphql(
         graphqlOperation(getUser, {
           id: userInfo.attributes.sub,
+          sortDirection: "DESC",
         })
       );
       setChatRoomCount(userData.data.getUser.chatRoomUser.items.length);
 
-      setChatRooms(userData.data.getUser.chatRoomUser.items);
+      // setChatRooms(userData.data.getUser.chatRoomUser.items);
+      var chatsSorted = userData.data.getUser.chatRoomUser.items;
+      // chatsSorted.sort(
+      //   (a, b) =>
+      //     Date.parse(b.chatRoom.lastMessage.updatedAt) -
+      //     Date.parse(a.chatRoom.lastMessage.updatedAt)
+      // );
+      chatsSorted = chatsSorted.sort((a, b) =>
+        propertyRetriever(a) > propertyRetriever(b) ? 1 : -1
+      );
+
+      setChatRooms(chatsSorted);
+      console.log(chatsSorted);
+      for (let index = 0; index < chatsSorted.length; index++) {
+        console.log(propertyRetriever(chatsSorted[index]));
+      }
+      console.log("+++++++++++++++++");
     } catch (e) {
       console.log(e);
     }
@@ -50,7 +71,11 @@ export default function ChatsScreen() {
       )}
       <FlatList
         style={{ width: "100%" }}
-        data={chatRooms}
+        // data={partners.sort((a, b) => a.localeCompare(b))}
+        // data={chatRooms}
+        data={chatRooms.sort(
+          (a, b) => Date.parse(a.updatedAt) - Date.parse(b.updatedAt)
+        )}
         renderItem={({ item }) => <ChatListItem chatRoom={item.chatRoom} />}
         keyExtractor={(item) => item.id}
       />
