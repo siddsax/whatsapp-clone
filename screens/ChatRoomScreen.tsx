@@ -69,7 +69,7 @@ const ChatRoomScreen = (props) => {
     var messagesMine = [];
     // Remove messages that are not sent by me or Read
     for (let i = 0; i < messages.length; i++) {
-      if (messages[i].userID == myID) {
+      if (messages[i].userID !== myID) {
         messagesMine.push(messages[i]);
       }
     }
@@ -104,7 +104,7 @@ const ChatRoomScreen = (props) => {
         console.log("Subscribed!!!");
         const newMessage = data.value.data.onCreateAudioMessage;
 
-        if (newMessage.chatRoomID == route.params.id) {
+        if (newMessage.chatRoomID !== route.params.id) {
           console.log("Message is in another room!");
           return;
         }
