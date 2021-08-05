@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { userContext } from "./context/context";
 
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
@@ -35,6 +36,7 @@ const randomImages = [
 function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  const [userInfo, setUserInfo] = useState();
 
   const getRandomImage = () => {
     return randomImages[Math.floor(Math.random() * randomImages.length)];
@@ -55,6 +57,8 @@ function App() {
       const userInfo = await Auth.currentAuthenticatedUser({
         bypassCache: true,
       });
+
+      setUserInfo(userInfo);
 
       if (userInfo) {
         const userData = await API.graphql(
@@ -85,10 +89,12 @@ function App() {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
+      <userContext.Provider value={userInfo}>
+        <SafeAreaProvider>
+          <Navigation colorScheme={colorScheme} />
+          <StatusBar />
+        </SafeAreaProvider>
+      </userContext.Provider>
     );
   }
 }

@@ -1,20 +1,20 @@
-import * as React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import { FlatList, StyleSheet, Text } from "react-native";
 import { View } from "../components/Themed";
 import ChatListItem from "../components/ChatListItem";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 
-import chatRooms from "../data/ChatRooms";
 import NewMessageButton from "../components/NewMessageButton";
 import { useEffect, useState } from "react";
 
 import { getUser } from "./queries";
 import { useIsFocused } from "@react-navigation/native";
+import Colors from "../constants/Colors";
 
 export default function ChatsScreen() {
   const [chatRooms, setChatRooms] = useState([]);
   const isFocused = useIsFocused();
-
+  const [chatRoomCount, setChatRoomCount] = useState(1);
   const fetchChatRooms = async () => {
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
@@ -24,6 +24,7 @@ export default function ChatsScreen() {
           id: userInfo.attributes.sub,
         })
       );
+      setChatRoomCount(userData.data.getUser.chatRoomUser.items.length);
 
       setChatRooms(userData.data.getUser.chatRoomUser.items);
     } catch (e) {
@@ -40,6 +41,13 @@ export default function ChatsScreen() {
 
   return (
     <View style={styles.container}>
+      {chatRoomCount == 0 ? (
+        <View style={styles.statusPopUp}>
+          <Text style={styles.flashMessageStyle}>{"Create Chatrooms!!"}</Text>
+        </View>
+      ) : (
+        <Text></Text>
+      )}
       <FlatList
         style={{ width: "100%" }}
         data={chatRooms}
@@ -56,5 +64,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  statusPopUp: {
+    opacity: 0.5,
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+    fontWeight: "bold",
+    backgroundColor: Colors.CREAM_TOP,
+    marginLeft: "30%",
+    marginRight: "30%",
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  flashMessageStyle: {
+    fontWeight: "bold",
+    color: "black",
   },
 });

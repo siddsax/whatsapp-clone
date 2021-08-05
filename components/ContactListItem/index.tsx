@@ -13,32 +13,19 @@ import { getChatRoomUserID, getUserChatRoomNName } from "./queries";
 import { listChatRooms } from "../../src/graphql/queries";
 import { useEffect, useState } from "react";
 
-export type ContactListItemProps = {
-  user: User;
-};
-
-const ContactListItem = (props: ContactListItemProps) => {
-  const { user } = props;
+const ContactListItem = (props: any) => {
+  const { user, setFlashMessage, userInfo } = props;
   const [stateDisabled, setStateDisabled] = useState(false);
-  const [userInfo, setUserInfo] = useState();
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const authUser = async () => {
-      const userInfo = await Auth.currentAuthenticatedUser();
-
-      setUserInfo(userInfo);
-    };
-
-    authUser();
-  }, []);
-
   const onClick = async () => {
     try {
+      setFlashMessage(true);
       setStateDisabled(true);
 
       console.log("------- Start -----");
+
       var chatRoomID = null;
       const userFull = await API.graphql(
         graphqlOperation(getUserChatRoomNName, { id: user.id })
@@ -131,9 +118,11 @@ const ContactListItem = (props: ContactListItemProps) => {
         myID: userInfo.attributes.sub,
         imageUri: userFull.data.getUser.imageUri,
       });
+      setFlashMessage(false);
       setStateDisabled(false);
     } catch (e) {
       console.log(e);
+      setFlashMessage(false);
       setStateDisabled(false);
     }
   };
