@@ -13,7 +13,7 @@ import { getChatRoomUserID, getUserChatRoomNName } from "./queries";
 import { listChatRooms } from "../../src/graphql/queries";
 import { useEffect, useState } from "react";
 
-const ContactListItem = (props: any) => {
+const CreateChatRoomButton = (props: any) => {
   const { user, setFlashMessage, userInfo } = props;
   const [stateDisabled, setStateDisabled] = useState(false);
 
@@ -131,18 +131,32 @@ const ContactListItem = (props: any) => {
     <TouchableWithoutFeedback onPress={onClick} disabled={stateDisabled}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
-          <Image source={{ uri: user.imageUri }} style={styles.avatar} />
+          <Text>Create</Text>
 
-          <View style={styles.midContainer}>
+          {/* <View style={styles.midContainer}>
             <Text style={styles.username}>{user.name}</Text>
             <Text numberOfLines={2} style={styles.status}>
               {user.status}
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </TouchableWithoutFeedback>
+    // <TouchableWithoutFeedback onPress={onClick} disabled={stateDisabled}>
+    //   <View style={styles.container}>
+    //     <View style={styles.lefContainer}>
+    //       <Image source={{ uri: user.imageUri }} style={styles.avatar} />
+
+    //       <View style={styles.midContainer}>
+    //         <Text style={styles.username}>{user.name}</Text>
+    //         <Text numberOfLines={2} style={styles.status}>
+    //           {user.status}
+    //         </Text>
+    //       </View>
+    //     </View>
+    //   </View>
+    // </TouchableWithoutFeedback>
   );
 };
 
-export default ContactListItem;
+export default CreateChatRoomButton;

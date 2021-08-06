@@ -2,11 +2,18 @@ import * as React from "react";
 import { FlatList, StyleSheet, Text } from "react-native";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { View } from "../components/Themed";
-import ContactListItem from "../components/ContactListItem";
+import ContactListItem from "../components/CreateChatRoomButton";
 
 import { listUsers } from "../src/graphql/queries";
 import { useEffect, useState } from "react";
 import Colors from "../constants/Colors";
+
+
+
+
+
+
+
 
 export default function ContactsScreen() {
   const [users, setUsers] = useState([]);
