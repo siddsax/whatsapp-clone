@@ -26,28 +26,13 @@ export default function ChatsScreen() {
       const userData = await API.graphql(
         graphqlOperation(getUser, {
           id: userInfo.attributes.sub,
-          sortDirection: "DESC",
         })
       );
-      setChatRoomCount(userData.data.getUser.chatRoomUser.items.length);
 
-      // setChatRooms(userData.data.getUser.chatRoomUser.items);
-      var chatsSorted = userData.data.getUser.chatRoomUser.items;
-      // chatsSorted.sort(
-      //   (a, b) =>
-      //     Date.parse(b.chatRoom.lastMessage.updatedAt) -
-      //     Date.parse(a.chatRoom.lastMessage.updatedAt)
-      // );
-      chatsSorted = chatsSorted.sort((a, b) =>
-        propertyRetriever(a) > propertyRetriever(b) ? 1 : -1
-      );
+      var chats = userData.data.getUser.chatRoomUser.items;
+      setChatRoomCount(chats.length);
+      setChatRooms(chats);
 
-      setChatRooms(chatsSorted);
-      console.log(chatsSorted);
-      for (let index = 0; index < chatsSorted.length; index++) {
-        console.log(propertyRetriever(chatsSorted[index]));
-      }
-      console.log("+++++++++++++++++");
     } catch (e) {
       console.log(e);
     }
@@ -71,8 +56,6 @@ export default function ChatsScreen() {
       )}
       <FlatList
         style={{ width: "100%" }}
-        // data={partners.sort((a, b) => a.localeCompare(b))}
-        // data={chatRooms}
         data={chatRooms.sort(
           (a, b) => Date.parse(a.updatedAt) - Date.parse(b.updatedAt)
         )}
