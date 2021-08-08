@@ -26,3 +26,26 @@ export const getUserChatRoomNName = /* GraphQL */ `
     }
   }
 `;
+
+export const listUserChatRoomNName = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        name
+        imageUri
+        id
+        chatRoomUser {
+          items {
+            chatRoomID
+          }
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;

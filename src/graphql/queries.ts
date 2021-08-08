@@ -64,6 +64,7 @@ export const getChatRoomUser = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -108,6 +109,7 @@ export const listChatRoomUsers = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -123,6 +125,7 @@ export const listChatRoomUsers = /* GraphQL */ `
 export const getChatRoom = /* GraphQL */ `
   query GetChatRoom($id: ID!) {
     getChatRoom(id: $id) {
+      name
       id
       chatRoomUsers {
         items {
@@ -160,6 +163,7 @@ export const getChatRoom = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -186,6 +190,7 @@ export const listChatRooms = /* GraphQL */ `
   ) {
     listChatRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -229,6 +234,7 @@ export const getMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -274,6 +280,7 @@ export const listMessages = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -304,6 +311,7 @@ export const getAudioMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -354,6 +362,7 @@ export const listAudioMessages = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -365,6 +374,46 @@ export const listAudioMessages = /* GraphQL */ `
           region
           key
         }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const chatRoomByName = /* GraphQL */ `
+  query ChatRoomByName(
+    $name: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelChatRoomFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    chatRoomByName(
+      name: $name
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        name
+        id
+        chatRoomUsers {
+          nextToken
+        }
+        messages {
+          nextToken
+        }
+        lastMessageID
+        lastMessage {
+          id
+          createdAt
+          userID
+          chatRoomID
+          read
+          updatedAt
+        }
+        createdAt
         updatedAt
       }
       nextToken
@@ -403,6 +452,7 @@ export const messagesByChatRoom = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -445,6 +495,7 @@ export const audioMessagesByChatRoom = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt

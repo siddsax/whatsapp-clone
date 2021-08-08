@@ -1,24 +1,24 @@
 import * as React from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { View } from "../components/Themed";
-import ContactListItem from "../components/CreateChatRoomButton";
+import ContactListItem from "../components/CreateChatRoomComponents/ContactListItem";
+import CreateChatRoomButton from "../components/CreateChatRoomComponents/CreateChatRoomButton";
 
 import { listUsers } from "../src/graphql/queries";
 import { useEffect, useState } from "react";
 import Colors from "../constants/Colors";
 
-
-
-
-
-
-
-
 export default function ContactsScreen() {
   const [users, setUsers] = useState([]);
   const [flashMessage, setFlashMessage] = useState();
   const [userInfo, setUserInfo] = useState();
+  const [chatUsers, setChatUsers] = useState([]);
 
   useEffect(() => {
     const authUserNfetchUsers = async () => {
@@ -35,6 +35,7 @@ export default function ContactsScreen() {
       setUsers(usersData.data.listUsers.items);
       setUserInfo(userInfo);
     };
+    setChatUsers([]);
 
     authUserNfetchUsers();
   }, []);
@@ -56,10 +57,21 @@ export default function ContactsScreen() {
             user={item}
             setFlashMessage={setFlashMessage}
             userInfo={userInfo}
+            chatUsers={chatUsers}
+            setChatUsers={setChatUsers}
           />
         )}
         keyExtractor={(item) => item.id}
       />
+      {users.length > 0 ? (
+        <CreateChatRoomButton
+          usersID={chatUsers}
+          setFlashMessage={setFlashMessage}
+          userInfo={userInfo}
+        />
+      ) : (
+        <View></View>
+      )}
     </View>
   );
 }

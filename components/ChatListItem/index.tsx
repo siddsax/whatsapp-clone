@@ -12,35 +12,56 @@ export type ChatListItemProps = {
 
 const ChatListItem = (props: ChatListItemProps) => {
   const { chatRoom } = props;
-  const [otherUser, setOtherUser] = useState(null);
+  const [otherUsers, setOtherUsers] = useState(null);
+  const [otherUsersName, setOtherUsersName] = useState(null);
   const [thisUser, setThisUser] = useState(null);
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    const getOtherUser = async () => {
+    const getOtherUsers = async () => {
       const userInfo = await Auth.currentAuthenticatedUser();
       setThisUser(userInfo.attributes.sub);
-      if (chatRoom.chatRoomUsers.items[0].user.id === userInfo.attributes.sub) {
-        setOtherUser(chatRoom.chatRoomUsers.items[1].user);
-      } else {
-        setOtherUser(chatRoom.chatRoomUsers.items[0].user);
+      var otherUsers = [];
+      var names = [];
+      for (let i = 0; i < chatRoom.chatRoomUsers.items.length; i++) {
+        var user = chatRoom.chatRoomUsers.items[i].user;
+
+        if (user.id != userInfo.attributes.sub) {
+          otherUsers.push(user);
+          names.push(user.name);
+        }
       }
+      setOtherUsers(otherUsers);
+      setOtherUsersName(names);
+      console.log(chatRoom);
+      console.log("----------------");
+
+      // if (chatRoom.chatRoomUsers.items[0].user.id === userInfo.attributes.sub) {
+      //   setOtherUser(chatRoom.chatRoomUsers.items[1].user);
+      // } else {
+      //   setOtherUser(chatRoom.chatRoomUsers.items[0].user);
+      // }
     };
-    getOtherUser();
+    getOtherUsers();
   }, []);
 
   const onClick = () => {
     console.log("====================");
+    const imageUris = [];
+    for (let i = 0; i < otherUsers.length; i++) {
+      imageUris.push(otherUsers[i].imageUri);
+    }
+    console.log(imageUris);
     navigation.navigate("ChatRoom", {
       id: chatRoom.id,
-      name: otherUser.name,
+      names: otherUsersName,
       myID: thisUser,
-      imageUri: otherUser.imageUri,
+      imageUris: imageUris,
     });
   };
 
-  if (!otherUser) {
+  if (!otherUsers) {
     return null;
   }
 
@@ -48,10 +69,13 @@ const ChatListItem = (props: ChatListItemProps) => {
     <TouchableWithoutFeedback onPress={onClick}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
-          <Image source={{ uri: otherUser.imageUri }} style={styles.avatar} />
+          <Image
+            source={{ uri: otherUsers[0].imageUri }}
+            style={styles.avatar}
+          />
 
           <View style={styles.midContainer}>
-            <Text style={styles.username}>{otherUser.name}</Text>
+            <Text style={styles.username}>{otherUsersName}</Text>
             <Text numberOfLines={2} style={styles.lastMessage}>
               {chatRoom.lastMessage ? `${chatRoom.lastMessage.user.name}` : ""}
             </Text>

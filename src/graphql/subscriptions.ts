@@ -86,6 +86,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -128,6 +129,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -170,6 +172,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -197,6 +200,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
 export const onCreateChatRoom = /* GraphQL */ `
   subscription OnCreateChatRoom {
     onCreateChatRoom {
+      name
       id
       chatRoomUsers {
         items {
@@ -234,6 +238,7 @@ export const onCreateChatRoom = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -255,6 +260,7 @@ export const onCreateChatRoom = /* GraphQL */ `
 export const onUpdateChatRoom = /* GraphQL */ `
   subscription OnUpdateChatRoom {
     onUpdateChatRoom {
+      name
       id
       chatRoomUsers {
         items {
@@ -292,6 +298,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -313,6 +320,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
 export const onDeleteChatRoom = /* GraphQL */ `
   subscription OnDeleteChatRoom {
     onDeleteChatRoom {
+      name
       id
       chatRoomUsers {
         items {
@@ -350,6 +358,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
           updatedAt
         }
         chatRoom {
+          name
           id
           lastMessageID
           createdAt
@@ -388,6 +397,7 @@ export const onCreateMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -431,6 +441,7 @@ export const onUpdateMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -474,6 +485,7 @@ export const onDeleteMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -516,6 +528,7 @@ export const onCreateAudioMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -564,6 +577,7 @@ export const onUpdateAudioMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken
@@ -612,6 +626,7 @@ export const onDeleteAudioMessage = /* GraphQL */ `
         updatedAt
       }
       chatRoom {
+        name
         id
         chatRoomUsers {
           nextToken

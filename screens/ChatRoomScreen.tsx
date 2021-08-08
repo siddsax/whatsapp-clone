@@ -52,16 +52,11 @@ const ChatRoomScreen = (props) => {
   const [flashMessage, setFlashMessage] = useState("Idle");
   const [pendingMessageCount, setPendingMessageCount] = useState(0);
   const route = useRoute();
+  const [members, setMembers] = useState([]);
   var messageIndex = useRef(-1);
   var pace = useRef(1.0);
-  // var messages = useRef([]);
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "1X", value: 1 },
-    { label: "2X", value: 2 },
-  ]);
+  // var messages = useRef([]);
 
   const sizeButtons = 30;
   const colorButtons = "white";
@@ -72,7 +67,6 @@ const ChatRoomScreen = (props) => {
         chatRoomID: route.params.id,
       })
     );
-    console.log("FETCH MESSAGES");
 
     var allChatRoomMessages = messagesData.data.audioMessagesByChatRoom.items;
     var messagesMine = [];
@@ -96,21 +90,28 @@ const ChatRoomScreen = (props) => {
     if (messageIndex.current == -1) {
       // All messages have been read
       messageIndex.current = messagesMine.length;
-      console.log(messageIndex.current);
     }
 
-    console.log(status.isLoaded, status.isBuffering, status.isPlaying);
     setPendingMessageCount(messagesMine.length - messageIndex.current);
     setMessages(messagesMine);
   };
 
   useEffect(() => {
     fetchMessages();
+    const members = [];
+    for (let i = 0; i < route.params.imageUris.length; i++) {
+      members.push({
+        name: route.params.names[i],
+        imageUri: route.params.imageUris[i],
+      });
+    }
+    setMembers(members);
+    console.log(members);
+    console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }, []);
 
   useEffect(() => {
     if (!status.isPlaying && !status.isBuffering && flashMessage == "Idle") {
-      console.log("inside");
       playMusic();
     }
   }, [messages, flashMessage]);
@@ -120,11 +121,9 @@ const ChatRoomScreen = (props) => {
       graphqlOperation(onCreateAudioMessage)
     ).subscribe({
       next: (data) => {
-        console.log("Subscribed!!!");
         const newMessage = data.value.data.onCreateAudioMessage;
 
         if (newMessage.chatRoomID !== route.params.id) {
-          console.log("Message is in another room!");
           return;
         }
 
@@ -137,7 +136,6 @@ const ChatRoomScreen = (props) => {
   ///////////////////////////////// While Playing /////////////////////////////////
   const changeMusicState = async () => {
     if (buttonType == "play") {
-      console.log(status.audioProgress);
       if (status.audioProgress == 0 || status.audioProgress == 1) {
         await playMusic();
       } else {
@@ -148,8 +146,6 @@ const ChatRoomScreen = (props) => {
     }
   };
   const playMusic = async () => {
-    console.log("***************");
-    console.log(messageIndex.current, messages.length);
     if (messageIndex.current < messages.length) {
       try {
         setStatus((prevState) => ({
@@ -260,68 +256,42 @@ const ChatRoomScreen = (props) => {
       : undefined;
   }, [sound]);
 
-  useEffect(() => {
-    console.log("----------", flashMessage, "----------");
-    if (flashMessage == "Recording") {
-      console.log("Recording");
-    } else if (flashMessage == "Sending") {
-      console.log("sending");
-    } else if (flashMessage == "Sent") {
-      console.log("Sent");
-    } else {
-      console.log("Idle");
-    }
-  }, [flashMessage]);
+  const array = [
+    {
+      key: "1",
+      title: "example title 1",
+      subtitle: "example subtitle 1",
+    },
+    {
+      key: "2",
+      title: "example title 2",
+      subtitle: "example subtitle 2",
+    },
+    {
+      key: "3",
+      title: "example title 3",
+      subtitle: "example subtitle 3",
+    },
+  ];
+
+  const list = () => {
+    return members.map((member) => {
+      return (
+        <View style={styles.clubhousePicsListItem}>
+          <Image source={{ uri: member.imageUri }} style={styles.image} />
+          <Text style={styles.clubhousePicsListItemText}>{member.name}</Text>
+        </View>
+      );
+    });
+  };
 
   return (
     <ImageBackground style={{ width: "100%", height: "100%" }} source={BG}>
-      {/* <FlatList
-        data={messages}
-        renderItem={({ item }) => <ChatMessage myId={myId} message={item} />}
-        inverted
-      /> */}
-
-      {/* <View
-        style={{
-          // flexDirection: "row",
-          // justifyContent: "space-between",
-          paddingHorizontal: 15,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>
-          {status.durationMillis * status.audioProgress}/{status.durationMillis}
-        </Text>
-      </View> */}
-
-      {/* <Text>Pending Messages {pendingMessageCount}</Text>
-      {status.isBuffering ? (
-        <Text>
-          <ActivityIndicator size="small" color="#0000ff" />
-        </Text>
-      ) : (
-        <Text>
-          <Button onPress={playMusic} title="Play Music" />
-        </Text>
-      )}
-
-      <Button onPress={pauseMusic} title="Pause Music" />
-      
-       */}
-
       <View style={styles.clubhousePics}>
-        <Image source={{ uri: route.params.imageUri }} style={styles.image} />
-        {pendingMessageCount > 0 ? (
-          <View style={styles.pendingMessages}>
-            <Text style={styles.pendingMessagesText}>
-              {pendingMessageCount}
-            </Text>
-          </View>
-        ) : (
-          <Text></Text>
-        )}
+        <View style={styles.clubhousePicsList}>{list()}</View>
       </View>
+      {/* <Text>{members.length}</Text> */}
+
       <View>
         {flashMessage != "Idle" ? (
           <View style={styles.statusPopUp}>
@@ -376,10 +346,15 @@ const ChatRoomScreen = (props) => {
       </View>
 
       <View style={styles.bottomBar}>
-        {/* <TouchableHighlight>
-          <Text style={styles.paceBar}>{pace.current}X</Text>
-        </TouchableHighlight> */}
-
+        {pendingMessageCount == 0 ? (
+          <View style={styles.pendingMessagesBottomBar}>
+            <Text style={styles.pendingMessagesText}>
+              {pendingMessageCount}
+            </Text>
+          </View>
+        ) : (
+          <Text></Text>
+        )}
         <Slider
           style={styles.slider}
           minimumValue={0}
@@ -390,7 +365,6 @@ const ChatRoomScreen = (props) => {
           disabled={true}
         />
 
-        {/* <Button onPress={changePace} title="change pace" /> */}
         <View style={styles.recordButton}>
           <InputBox
             chatRoomID={route.params.id}
@@ -415,6 +389,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   pendingMessagesText: {
     fontWeight: "bold",
   },
@@ -425,40 +400,74 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.2, //"20%",
     height: windowWidth * 0.2, //"10%",
     borderRadius: windowWidth * 0.1,
-    // overflow: "hidden",
     borderWidth: 3,
     borderColor: "black",
+    backgroundColor: "red",
   },
   clubhousePics: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: "red",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
-  slider: { width: "70%", height: 40, marginBottom: 5 },
+  clubhousePicsList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  clubhousePicsListItem: {
+    margin: "5%",
+    alignItems: "center",
+    fontWeight: "bold",
+  },
+  clubhousePicsListItemText: {
+    fontWeight: "bold",
+    margin: 4,
+  },
+  // Bottom Bar ######################################
   bottomBar: {
     justifyContent: "center",
+    alignContent: "center",
     alignItems: "flex-end",
     flex: 0,
     marginBottom: "10%",
     flexDirection: "row",
   },
+  pendingMessagesBottomBar: {
+    backgroundColor: "red",
+    width: windowWidth * 0.06,
+    height: windowWidth * 0.06,
+    borderRadius: windowWidth * 0.03,
+    marginBottom: 15,
+    // marginLeft: "5%",
+    // marginRight: "10%",
+    fontWeight: "bold",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  slider: {
+    width: "60%",
+    height: 40,
+    marginLeft: "5%",
+    marginRight: "5%",
+    marginBottom: 5,
+  },
+
   recordButton: {
     marginLeft: 5,
   },
   paceBar: {
     justifyContent: "flex-start",
-    // flex: 1,
     marginBottom: 18,
     marginRight: 10,
     fontWeight: "bold",
   },
+  // Bottom Bar ######################################
+
+  // Navigation Bar ######################################
   audioNavigation: {
     flex: 0,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    // alignItems: "flex-end",
   },
   goBack: {
     // flex: 1,
@@ -478,6 +487,7 @@ const styles = StyleSheet.create({
     marginRight: "30%",
     marginBottom: 10,
   },
+  // Navigation Bar ######################################
   flashMessageStyle: {
     fontWeight: "bold",
     color: "black",

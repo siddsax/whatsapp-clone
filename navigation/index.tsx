@@ -121,7 +121,7 @@ function RootNavigator() {
         name="ChatRoom"
         component={ChatRoomScreen}
         options={({ route }) => ({
-          title: route.params.name,
+          title: route.params.names,
           headerRight: () => (
             <View
               style={{
@@ -132,11 +132,9 @@ function RootNavigator() {
               }}
             >
               <Image
-                source={{ uri: route.params.imageUri }}
+                source={{ uri: route.params.imageUris[0] }}
                 style={styles.image}
               />
-              {/* <FontAwesome5 name="video" size={22} color={"black"} />
-              <MaterialIcons name="call" size={22} color={"black"} /> */}
               <MaterialCommunityIcons
                 name="dots-vertical"
                 size={22}

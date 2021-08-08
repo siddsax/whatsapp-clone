@@ -77,13 +77,11 @@ const InputBox = (props) => {
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
-      console.log("Starting recording..");
       setFlashMessage("Recording");
       const recording = new Audio.Recording();
       await recording.prepareToRecordAsync(RecordingOptions);
       await recording.startAsync();
       setRecording(recording);
-      console.log("Recording started");
     } catch (err) {
       console.error("Failed to start recording", err);
     }
@@ -128,14 +126,11 @@ const InputBox = (props) => {
   };
 
   const _onPressOut = async () => {
-    console.log("Stopping recording..");
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
     let recordingURI = recording.getURI();
     const response = await fetch(recordingURI);
     const blob = await response.blob();
-
-    console.log("Recording stopped and stored at", recordingURI);
 
     try {
       const audioName = chatRoomID.concat(
@@ -145,7 +140,6 @@ const InputBox = (props) => {
         Date.now(),
         ".m4a"
       );
-      console.log(audioName);
 
       setFlashMessage("Sending");
       await Storage.put(audioName, blob).then((result) => {
