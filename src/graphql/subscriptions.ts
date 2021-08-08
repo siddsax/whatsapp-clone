@@ -87,6 +87,7 @@ export const onCreateChatRoomUser = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -130,6 +131,7 @@ export const onUpdateChatRoomUser = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -173,6 +175,7 @@ export const onDeleteChatRoomUser = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -201,6 +204,7 @@ export const onCreateChatRoom = /* GraphQL */ `
   subscription OnCreateChatRoom {
     onCreateChatRoom {
       name
+      displayNameChat
       id
       chatRoomUsers {
         items {
@@ -239,6 +243,7 @@ export const onCreateChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -261,6 +266,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
   subscription OnUpdateChatRoom {
     onUpdateChatRoom {
       name
+      displayNameChat
       id
       chatRoomUsers {
         items {
@@ -299,6 +305,7 @@ export const onUpdateChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -321,6 +328,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
   subscription OnDeleteChatRoom {
     onDeleteChatRoom {
       name
+      displayNameChat
       id
       chatRoomUsers {
         items {
@@ -359,6 +367,7 @@ export const onDeleteChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -398,6 +407,7 @@ export const onCreateMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -442,6 +452,7 @@ export const onUpdateMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -486,6 +497,7 @@ export const onDeleteMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -529,6 +541,7 @@ export const onCreateAudioMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -578,6 +591,7 @@ export const onUpdateAudioMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -627,6 +641,7 @@ export const onDeleteAudioMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken

@@ -26,6 +26,7 @@ import {
   chatRoomByName,
 } from "../../src/graphql/queries";
 import { useEffect, useState } from "react";
+import Dialog from "react-native-dialog";
 
 const sortArrs = (arr1, arr2, arr3) => {
   //1) combine the arrays:
@@ -51,6 +52,9 @@ const sortArrs = (arr1, arr2, arr3) => {
 const CreateChatRoomButton = (props: any) => {
   const { usersID, setFlashMessage, userInfo } = props;
   const [stateDisabled, setStateDisabled] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [visibleAlert, setVisibleAlert] = useState(false);
+  const [chatName, setChatName] = useState("");
 
   const navigation = useNavigation();
 
@@ -96,8 +100,8 @@ const CreateChatRoomButton = (props: any) => {
       names = output.arr2;
       imageUris = output.arr3;
 
-      var nameChatRoom = ids[0];
-      for (let i = 1; i < usersChatRooms.data.listUsers.items.length; i++) {
+      var nameChatRoom = userInfo.attributes.sub;
+      for (let i = 0; i < usersChatRooms.data.listUsers.items.length; i++) {
         nameChatRoom = nameChatRoom + "-" + ids[i];
       }
 
@@ -114,19 +118,23 @@ const CreateChatRoomButton = (props: any) => {
         chatRoomID = null;
       }
 
+      var displayNameChat;
       if (chatRoomID == null) {
         console.log("*****************************");
         //  1. Create a new Chat Room
         if (imageUris.length > 1) {
           // ask for chat name
+          displayNameChat = chatName;
         } else {
-          const displayNameChat = "other guy name";
+          displayNameChat = names[0];
         }
+
         const newChatRoomData = await API.graphql(
           graphqlOperation(createChatRoom, {
             input: {
               lastMessageID: "zz753fca-e8c3-473b-8e85-b14196e84e16",
               name: nameChatRoom,
+              displayNameChat: displayNameChat,
             },
           })
         );
@@ -164,7 +172,8 @@ const CreateChatRoomButton = (props: any) => {
 
       navigation.navigate("ChatRoom", {
         id: chatRoomID,
-        names: names,
+        chatName: displayNameChat,
+        memberNames: names,
         myID: userInfo.attributes.sub,
         imageUris: imageUris,
       });
@@ -176,11 +185,49 @@ const CreateChatRoomButton = (props: any) => {
       setStateDisabled(false);
     }
   };
+  // Dialog box ##################################
+  const showDialog = () => {
+    if (usersID.length > 1) {
+      setVisible(true);
+    } else if (usersID.length == 0) {
+      setVisibleAlert(true);
+    } else {
+      onClick();
+    }
+  };
+  const handleCancel = () => {
+    setVisible(false);
+  };
+  const handleOk = () => {
+    if (chatName) {
+      console.log(chatName);
+      setVisible(false);
+      onClick();
+    } else {
+      console.log("**********");
+    }
+  };
+
+  const handleOkAlert = () => {
+    setVisibleAlert(false);
+  };
+  // ####################################################################
 
   return (
-    <TouchableWithoutFeedback onPress={onClick} disabled={stateDisabled}>
+    <TouchableWithoutFeedback onPress={showDialog} disabled={stateDisabled}>
       <View style={styles.createChatRoomButtonContainer}>
         <Text style={styles.creatChatRoomText}>Create ChatRoom</Text>
+        <Dialog.Container visible={visible}>
+          <Dialog.Title>Chat Name</Dialog.Title>
+          <Dialog.Description>Set group chat name</Dialog.Description>
+          <Dialog.Input onChangeText={(name) => setChatName(name)} />
+          <Dialog.Button label="Cancel" onPress={handleCancel} />
+          <Dialog.Button label="OK" onPress={handleOk} />
+        </Dialog.Container>
+        <Dialog.Container visible={visibleAlert}>
+          <Dialog.Title>Select Users!</Dialog.Title>
+          <Dialog.Button label="OK" onPress={handleOkAlert} />
+        </Dialog.Container>
       </View>
     </TouchableWithoutFeedback>
   );

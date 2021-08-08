@@ -99,6 +99,7 @@ export const createChatRoomUser = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -145,6 +146,7 @@ export const updateChatRoomUser = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -191,6 +193,7 @@ export const deleteChatRoomUser = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -222,6 +225,7 @@ export const createChatRoom = /* GraphQL */ `
   ) {
     createChatRoom(input: $input, condition: $condition) {
       name
+      displayNameChat
       id
       chatRoomUsers {
         items {
@@ -260,6 +264,7 @@ export const createChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -285,6 +290,7 @@ export const updateChatRoom = /* GraphQL */ `
   ) {
     updateChatRoom(input: $input, condition: $condition) {
       name
+      displayNameChat
       id
       chatRoomUsers {
         items {
@@ -323,6 +329,7 @@ export const updateChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -348,6 +355,7 @@ export const deleteChatRoom = /* GraphQL */ `
   ) {
     deleteChatRoom(input: $input, condition: $condition) {
       name
+      displayNameChat
       id
       chatRoomUsers {
         items {
@@ -386,6 +394,7 @@ export const deleteChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -428,6 +437,7 @@ export const createMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -475,6 +485,7 @@ export const updateMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -522,6 +533,7 @@ export const deleteMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -568,6 +580,7 @@ export const createAudioMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -620,6 +633,7 @@ export const updateAudioMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -672,6 +686,7 @@ export const deleteAudioMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken

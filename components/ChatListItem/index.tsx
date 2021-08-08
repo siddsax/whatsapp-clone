@@ -13,7 +13,7 @@ export type ChatListItemProps = {
 const ChatListItem = (props: ChatListItemProps) => {
   const { chatRoom } = props;
   const [otherUsers, setOtherUsers] = useState(null);
-  const [otherUsersName, setOtherUsersName] = useState(null);
+  const [memberNames, setMemberNames] = useState(null);
   const [thisUser, setThisUser] = useState(null);
 
   const navigation = useNavigation();
@@ -33,9 +33,7 @@ const ChatListItem = (props: ChatListItemProps) => {
         }
       }
       setOtherUsers(otherUsers);
-      setOtherUsersName(names);
-      console.log(chatRoom);
-      console.log("----------------");
+      setMemberNames(names);
 
       // if (chatRoom.chatRoomUsers.items[0].user.id === userInfo.attributes.sub) {
       //   setOtherUser(chatRoom.chatRoomUsers.items[1].user);
@@ -52,10 +50,11 @@ const ChatListItem = (props: ChatListItemProps) => {
     for (let i = 0; i < otherUsers.length; i++) {
       imageUris.push(otherUsers[i].imageUri);
     }
-    console.log(imageUris);
+
     navigation.navigate("ChatRoom", {
       id: chatRoom.id,
-      names: otherUsersName,
+      memberNames: memberNames,
+      chatName: chatRoom.displayNameChat,
       myID: thisUser,
       imageUris: imageUris,
     });
@@ -75,10 +74,10 @@ const ChatListItem = (props: ChatListItemProps) => {
           />
 
           <View style={styles.midContainer}>
-            <Text style={styles.username}>{otherUsersName}</Text>
-            <Text numberOfLines={2} style={styles.lastMessage}>
+            <Text style={styles.username}>{chatRoom.displayNameChat}</Text>
+            {/* <Text numberOfLines={2} style={styles.lastMessage}>
               {chatRoom.lastMessage ? `${chatRoom.lastMessage.user.name}` : ""}
-            </Text>
+            </Text> */}
           </View>
         </View>
 

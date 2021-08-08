@@ -88,7 +88,8 @@ export type ChatRoomUser = {
 
 export type ChatRoom = {
   __typename: "ChatRoom",
-  name?: string | null,
+  name?: string,
+  displayNameChat?: string,
   id?: string,
   chatRoomUsers?: ModelChatRoomUserConnection,
   messages?: ModelMessageConnection,
@@ -188,13 +189,15 @@ export type DeleteChatRoomUserInput = {
 };
 
 export type CreateChatRoomInput = {
-  name?: string | null,
+  name: string,
+  displayNameChat: string,
   id?: string | null,
   lastMessageID: string,
 };
 
 export type ModelChatRoomConditionInput = {
   name?: ModelStringInput | null,
+  displayNameChat?: ModelStringInput | null,
   lastMessageID?: ModelIDInput | null,
   and?: Array< ModelChatRoomConditionInput | null > | null,
   or?: Array< ModelChatRoomConditionInput | null > | null,
@@ -203,6 +206,7 @@ export type ModelChatRoomConditionInput = {
 
 export type UpdateChatRoomInput = {
   name?: string | null,
+  displayNameChat?: string | null,
   id: string,
   lastMessageID?: string | null,
 };
@@ -313,6 +317,7 @@ export type ModelChatRoomUserFilterInput = {
 
 export type ModelChatRoomFilterInput = {
   name?: ModelStringInput | null,
+  displayNameChat?: ModelStringInput | null,
   id?: ModelIDInput | null,
   lastMessageID?: ModelIDInput | null,
   and?: Array< ModelChatRoomFilterInput | null > | null,
@@ -483,7 +488,8 @@ export type CreateChatRoomUserMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -537,7 +543,8 @@ export type UpdateChatRoomUserMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -591,7 +598,8 @@ export type DeleteChatRoomUserMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -627,7 +635,8 @@ export type CreateChatRoomMutationVariables = {
 export type CreateChatRoomMutation = {
   createChatRoom?:  {
     __typename: "ChatRoom",
-    name?: string | null,
+    name: string,
+    displayNameChat: string,
     id: string,
     chatRoomUsers?:  {
       __typename: "ModelChatRoomUserConnection",
@@ -672,7 +681,8 @@ export type CreateChatRoomMutation = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -700,7 +710,8 @@ export type UpdateChatRoomMutationVariables = {
 export type UpdateChatRoomMutation = {
   updateChatRoom?:  {
     __typename: "ChatRoom",
-    name?: string | null,
+    name: string,
+    displayNameChat: string,
     id: string,
     chatRoomUsers?:  {
       __typename: "ModelChatRoomUserConnection",
@@ -745,7 +756,8 @@ export type UpdateChatRoomMutation = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -773,7 +785,8 @@ export type DeleteChatRoomMutationVariables = {
 export type DeleteChatRoomMutation = {
   deleteChatRoom?:  {
     __typename: "ChatRoom",
-    name?: string | null,
+    name: string,
+    displayNameChat: string,
     id: string,
     chatRoomUsers?:  {
       __typename: "ModelChatRoomUserConnection",
@@ -818,7 +831,8 @@ export type DeleteChatRoomMutation = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -866,7 +880,8 @@ export type CreateMessageMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -921,7 +936,8 @@ export type UpdateMessageMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -976,7 +992,8 @@ export type DeleteMessageMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1030,7 +1047,8 @@ export type CreateAudioMessageMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1091,7 +1109,8 @@ export type UpdateAudioMessageMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1152,7 +1171,8 @@ export type DeleteAudioMessageMutation = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1265,7 +1285,8 @@ export type GetChatRoomUserQuery = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1318,7 +1339,8 @@ export type ListChatRoomUsersQuery = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -1338,7 +1360,8 @@ export type GetChatRoomQueryVariables = {
 export type GetChatRoomQuery = {
   getChatRoom?:  {
     __typename: "ChatRoom",
-    name?: string | null,
+    name: string,
+    displayNameChat: string,
     id: string,
     chatRoomUsers?:  {
       __typename: "ModelChatRoomUserConnection",
@@ -1383,7 +1406,8 @@ export type GetChatRoomQuery = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -1414,7 +1438,8 @@ export type ListChatRoomsQuery = {
     __typename: "ModelChatRoomConnection",
     items?:  Array< {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1468,7 +1493,8 @@ export type GetMessageQuery = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1522,7 +1548,8 @@ export type ListMessagesQuery = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -1560,7 +1587,8 @@ export type GetAudioMessageQuery = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1620,7 +1648,8 @@ export type ListAudioMessagesQuery = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -1652,7 +1681,8 @@ export type ChatRoomByNameQuery = {
     __typename: "ModelChatRoomConnection",
     items?:  Array< {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1709,7 +1739,8 @@ export type MessagesByChatRoomQuery = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -1750,7 +1781,8 @@ export type AudioMessagesByChatRoomQuery = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -1862,7 +1894,8 @@ export type OnCreateChatRoomUserSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1911,7 +1944,8 @@ export type OnUpdateChatRoomUserSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1960,7 +1994,8 @@ export type OnDeleteChatRoomUserSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -1991,7 +2026,8 @@ export type OnDeleteChatRoomUserSubscription = {
 export type OnCreateChatRoomSubscription = {
   onCreateChatRoom?:  {
     __typename: "ChatRoom",
-    name?: string | null,
+    name: string,
+    displayNameChat: string,
     id: string,
     chatRoomUsers?:  {
       __typename: "ModelChatRoomUserConnection",
@@ -2036,7 +2072,8 @@ export type OnCreateChatRoomSubscription = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -2059,7 +2096,8 @@ export type OnCreateChatRoomSubscription = {
 export type OnUpdateChatRoomSubscription = {
   onUpdateChatRoom?:  {
     __typename: "ChatRoom",
-    name?: string | null,
+    name: string,
+    displayNameChat: string,
     id: string,
     chatRoomUsers?:  {
       __typename: "ModelChatRoomUserConnection",
@@ -2104,7 +2142,8 @@ export type OnUpdateChatRoomSubscription = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -2127,7 +2166,8 @@ export type OnUpdateChatRoomSubscription = {
 export type OnDeleteChatRoomSubscription = {
   onDeleteChatRoom?:  {
     __typename: "ChatRoom",
-    name?: string | null,
+    name: string,
+    displayNameChat: string,
     id: string,
     chatRoomUsers?:  {
       __typename: "ModelChatRoomUserConnection",
@@ -2172,7 +2212,8 @@ export type OnDeleteChatRoomSubscription = {
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
-        name?: string | null,
+        name: string,
+        displayNameChat: string,
         id: string,
         lastMessageID: string,
         createdAt: string,
@@ -2215,7 +2256,8 @@ export type OnCreateMessageSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -2265,7 +2307,8 @@ export type OnUpdateMessageSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -2315,7 +2358,8 @@ export type OnDeleteMessageSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -2364,7 +2408,8 @@ export type OnCreateAudioMessageSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -2420,7 +2465,8 @@ export type OnUpdateAudioMessageSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",
@@ -2476,7 +2522,8 @@ export type OnDeleteAudioMessageSubscription = {
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
-      name?: string | null,
+      name: string,
+      displayNameChat: string,
       id: string,
       chatRoomUsers?:  {
         __typename: "ModelChatRoomUserConnection",

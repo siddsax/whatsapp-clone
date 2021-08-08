@@ -101,7 +101,7 @@ const ChatRoomScreen = (props) => {
     const members = [];
     for (let i = 0; i < route.params.imageUris.length; i++) {
       members.push({
-        name: route.params.names[i],
+        name: route.params.memberNames[i],
         imageUri: route.params.imageUris[i],
       });
     }

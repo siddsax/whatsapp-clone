@@ -65,6 +65,7 @@ export const getChatRoomUser = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -110,6 +111,7 @@ export const listChatRoomUsers = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -126,6 +128,7 @@ export const getChatRoom = /* GraphQL */ `
   query GetChatRoom($id: ID!) {
     getChatRoom(id: $id) {
       name
+      displayNameChat
       id
       chatRoomUsers {
         items {
@@ -164,6 +167,7 @@ export const getChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -191,6 +195,7 @@ export const listChatRooms = /* GraphQL */ `
     listChatRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -235,6 +240,7 @@ export const getMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -281,6 +287,7 @@ export const listMessages = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -312,6 +319,7 @@ export const getAudioMessage = /* GraphQL */ `
       }
       chatRoom {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -363,6 +371,7 @@ export const listAudioMessages = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -397,6 +406,7 @@ export const chatRoomByName = /* GraphQL */ `
     ) {
       items {
         name
+        displayNameChat
         id
         chatRoomUsers {
           nextToken
@@ -453,6 +463,7 @@ export const messagesByChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt
@@ -496,6 +507,7 @@ export const audioMessagesByChatRoom = /* GraphQL */ `
         }
         chatRoom {
           name
+          displayNameChat
           id
           lastMessageID
           createdAt

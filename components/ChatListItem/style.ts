@@ -1,17 +1,20 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     width: "100%",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     padding: 10,
   },
   lefContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   midContainer: {
-    justifyContent: 'space-around'
+    justifyContent: "space-around",
+    alignItems: "center",
+    // justifyContent: "center",
+    alignContent: "center",
   },
   avatar: {
     width: 60,
@@ -20,16 +23,17 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   username: {
-    fontWeight: 'bold',
+    flex: 0,
+    fontWeight: "bold",
     fontSize: 16,
   },
   lastMessage: {
     fontSize: 16,
-    color: 'grey',
+    color: "grey",
   },
   time: {
     fontSize: 14,
-    color: 'grey'
+    color: "grey",
   },
 });
 

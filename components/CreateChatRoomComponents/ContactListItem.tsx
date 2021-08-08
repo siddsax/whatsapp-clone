@@ -21,22 +21,18 @@ const ContactListItem = (props: any) => {
   const navigation = useNavigation();
 
   const onClick = async () => {
-    console.log(chatUsers)
+    console.log(chatUsers);
     if (userSelected) {
-      setUserSelected(false)
+      setUserSelected(false);
       const index = chatUsers.indexOf(user.id);
-      chatUsers.splice(index, 1)
+      chatUsers.splice(index, 1);
+      setChatUsers(chatUsers);
+    } else {
+      chatUsers.push(user.id);
+      setUserSelected(true);
       setChatUsers(chatUsers);
     }
-    else{
-      chatUsers.push(user.id)
-      setUserSelected(true)
-      setChatUsers(chatUsers)
-    }
-    console.log(chatUsers)
-    console.log("+++++++++++++++++++++++")
-    
-  }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={onClick} disabled={stateDisabled}>
@@ -51,7 +47,11 @@ const ContactListItem = (props: any) => {
             </Text>
           </View>
           <View style={styles.rightContainer}>
-            {userSelected ? <View style={styles.selectedCircle}></View>: <View></View>}
+            {userSelected ? (
+              <View style={styles.selectedCircle}></View>
+            ) : (
+              <View></View>
+            )}
           </View>
         </View>
       </View>
