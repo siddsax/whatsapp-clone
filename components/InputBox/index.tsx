@@ -141,13 +141,14 @@ const InputBox = (props) => {
         ".m4a"
       );
 
-      setFlashMessage("Sending");
+      setFlashMessage("Idle");
+      // setFlashMessage("Sending");
       await Storage.put(audioName, blob).then((result) => {
-        setFlashMessage("Sent");
+        // setFlashMessage("Sent");
         addAudioToDB(audioName);
-        setTimeout(() => {
-          setFlashMessage("Idle");
-        }, 1000);
+        // setTimeout(() => {
+        //   setFlashMessage("Idle");
+        // }, 1000);
       });
     } catch (error) {
       console.log("Error uploading file: ", error);

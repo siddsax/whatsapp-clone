@@ -74,7 +74,7 @@ function App() {
           id: userInfo.attributes.sub,
           name: userInfo.username,
           imageUri: getRandomImage(),
-          status: "Hey, I am using WhatsApp",
+          status: "MewTwo is Hip",
         };
 
         await API.graphql(graphqlOperation(createUser, { input: newUser }));
