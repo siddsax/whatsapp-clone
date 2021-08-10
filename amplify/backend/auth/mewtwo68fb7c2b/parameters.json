@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "whatsappclonea764e33c_identitypool_a764e33c",
+    "identityPoolName": "mewtwo68fb7c2b_identitypool_68fb7c2b",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "whatsaa764e33c",
-    "userPoolName": "whatsappclonea764e33c_userpool_a764e33c",
+    "resourceNameTruncated": "mewtwo68fb7c2b",
+    "userPoolName": "mewtwo68fb7c2b_userpool_68fb7c2b",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -20,7 +20,7 @@
     "requiredAttributes": [
         "email"
     ],
-    "userpoolClientGenerateSecret": true,
+    "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
         "email"
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "whatsaa764e33c_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "mewtwo68fb7c2b_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "a764e33c",
-    "resourceName": "whatsappclonea764e33c",
+    "sharedId": "68fb7c2b",
+    "resourceName": "mewtwo68fb7c2b",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -45,7 +45,16 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "defaultSocial",
+    "hostedUI": true,
+    "hostedUIDomainName": "mewtwo68fb7c2b-68fb7c2b",
+    "authProvidersUserPool": [
+        "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"mewtwo://\"],\"LogoutURLs\":[\"mewtwo://\"]}",
     "userPoolGroupList": [],
+    "serviceName": "Cognito",
+    "usernameCaseSensitive": false,
     "dependsOn": []
 }

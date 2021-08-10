@@ -7,17 +7,18 @@ import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 
-import { Auth, API, graphqlOperation } from "aws-amplify";
+import { Auth, API, graphqlOperation, Hub } from "aws-amplify";
 import { getUser } from "./src/graphql/queries";
 import { createUser } from "./src/graphql/mutations";
 
-import { withAuthenticator } from "aws-amplify-react-native";
+import { withAuthenticator, withOAuth } from "aws-amplify-react-native";
 import Amplify from "aws-amplify";
 import config from "./aws-exports";
 import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
-import { LogBox } from "react-native";
+import { LogBox, Text, Button, View, Linking, Platform } from "react-native";
 LogBox.ignoreLogs(["Setting a timer"]);
+import * as WebBrowser from "expo-web-browser";
 
 // Amplify.configure(config)
 Amplify.configure({
@@ -33,10 +34,33 @@ const randomImages = [
   "https://hieumobile.com/wp-content/uploads/avatar-among-us-9.jpg",
 ];
 
-function App() {
+async function urlOpener(url, redirectUrl) {
+  const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
+    url,
+    redirectUrl
+  );
+
+  if (type === "success" && Platform.OS === "ios") {
+    WebBrowser.dismissBrowser();
+    return Linking.openURL(newUrl);
+  }
+}
+
+function App(props) {
+  const {
+    oAuthUser,
+    oAuthError,
+    hostedUISignIn,
+    facebookSignIn,
+    googleSignIn,
+    amazonSignIn,
+    customProviderSignIn,
+    signOut,
+  } = props;
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
   const [userInfo, setUserInfo] = useState();
+  // const [user, setUser] = useState(null);
 
   const getRandomImage = () => {
     return randomImages[Math.floor(Math.random() * randomImages.length)];
@@ -85,18 +109,78 @@ function App() {
     fetchUser();
   }, []);
 
+  // useEffect(() => {
+  //   Hub.listen("auth", ({ payload: { event, data } }) => {
+  //     switch (event) {
+  //       case "signIn":
+  //         getUser().then((userData) => setUser(userData));
+  //         break;
+  //       case "signOut":
+  //         setUser(null);
+  //         break;
+  //       case "signIn_failure":
+  //       case "cognitoHostedUI_failure":
+  //         console.log("Sign in failure", data);
+  //         break;
+  //     }
+  //   });
+
+  //   getUser().then((userData) => setUser(userData));
+  // }, []);
+
+  // function getUser() {
+  //   return Auth.currentAuthenticatedUser()
+  //     .then((userData) => userData)
+  //     .catch(() => console.log("Not signed in"));
+  // }
+
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <userContext.Provider value={userInfo}>
-        <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
-        </SafeAreaProvider>
-      </userContext.Provider>
+      // <View>
+      //   <Text>User: {user ? JSON.stringify(user.attributes) : "None"}</Text>
+      //   {user ? (
+      //     <Button title="Sign Out" onPress={() => Auth.signOut()} />
+      //   ) : (
+      //     <Button
+      //       title="Federated Sign In"
+      //       onPress={() => Auth.federatedSignIn()}
+      //     />
+      //   )}
+      // </View>
+
+      // <View style={{ marginTop: "30%" }}>
+      //   <Text>
+      //     User: {oAuthUser ? JSON.stringify(oAuthUser.attributes) : "None"}
+      //   </Text>
+      //   {oAuthUser ? (
+      //     <Button title="Sign Out" onPress={signOut} />
+      //   ) : (
+      //     <>
+      //       {/* Go to the Cognito Hosted UI */}
+      //       <Button title="Cognito" onPress={hostedUISignIn} />
+
+      //       {/* Go directly to a configured identity provider */}
+      //       <Button title="Facebook" onPress={facebookSignIn} />
+      //       <Button title="Google" onPress={googleSignIn} />
+      //       <Button title="Amazon" onPress={amazonSignIn} />
+
+      //       {/* e.g. for OIDC providers */}
+      //       <Button
+      //         title="Yahoo"
+      //         onPress={() => customProviderSignIn("Yahoo")}
+      //       />
+      //     </>
+      //   )}
+      // </View>
+      <SafeAreaProvider>
+        <Navigation colorScheme={colorScheme} />
+        <StatusBar />
+      </SafeAreaProvider>
     );
   }
 }
 
 export default withAuthenticator(App);
+// export default withOAuth(App);

@@ -1,22 +1,15 @@
 {
-  "auth": {
-    "whatsappclonea764e33c": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false
-    }
-  },
   "api": {
-    "whatsappclone": {
+    "mewtwo": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {
         "authConfig": {
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authwhatsappclonea764e33c"
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 365,
+              "description": "mewtwoKey"
             }
           },
           "additionalAuthenticationProviders": []
@@ -24,8 +17,16 @@
       }
     }
   },
+  "auth": {
+    "mewtwo68fb7c2b": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  },
   "storage": {
-    "mediaContent": {
+    "s3b855f496": {
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }
