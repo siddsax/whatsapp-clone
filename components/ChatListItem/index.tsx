@@ -45,16 +45,25 @@ const ChatListItem = (props: ChatListItemProps) => {
   }, []);
 
   const onClick = () => {
+    console.log(otherUsers);
     console.log("====================");
     const imageUris = [];
     for (let i = 0; i < otherUsers.length; i++) {
       imageUris.push(otherUsers[i].imageUri);
     }
 
+    var name;
+    if (otherUsers.length == 1) {
+      name = otherUsers[0].name;
+    } else {
+      name = chatRoom.displayNameChat;
+    }
+    console.log(name, otherUsers.length);
+
     navigation.navigate("ChatRoom", {
       id: chatRoom.id,
       memberNames: memberNames,
-      chatName: chatRoom.displayNameChat,
+      chatName: name,
       myID: thisUser,
       imageUris: imageUris,
     });
@@ -74,7 +83,11 @@ const ChatListItem = (props: ChatListItemProps) => {
           />
 
           <View style={styles.midContainer}>
-            <Text style={styles.username}>{chatRoom.displayNameChat}</Text>
+            <Text style={styles.username}>
+              {otherUsers.length != 1
+                ? chatRoom.displayNameChat
+                : otherUsers[0].name}
+            </Text>
             {/* <Text numberOfLines={2} style={styles.lastMessage}>
               {chatRoom.lastMessage ? `${chatRoom.lastMessage.user.name}` : ""}
             </Text> */}
