@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { getUser } from "./queries";
 import { useIsFocused } from "@react-navigation/native";
 import Colors from "../constants/Colors";
+import { onCreateChatRoom } from "../src/graphql/subscriptions";
 
 export default function ChatsScreen() {
   const [chatRooms, setChatRooms] = useState([]);
@@ -20,6 +21,7 @@ export default function ChatsScreen() {
     return Date.parse(inp.chatRoom.lastMessage.updatedAt);
   };
   const fetchChatRooms = async () => {
+    console.log("Fetching Chatrooms");
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
 
@@ -32,7 +34,6 @@ export default function ChatsScreen() {
       var chats = userData.data.getUser.chatRoomUser.items;
       setChatRoomCount(chats.length);
       setChatRooms(chats);
-
     } catch (e) {
       console.log(e);
     }
@@ -44,6 +45,17 @@ export default function ChatsScreen() {
       fetchChatRooms();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    const subscription = API.graphql(
+      graphqlOperation(onCreateChatRoom)
+    ).subscribe({
+      next: () => {
+        fetchChatRooms();
+      },
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <View style={styles.container}>

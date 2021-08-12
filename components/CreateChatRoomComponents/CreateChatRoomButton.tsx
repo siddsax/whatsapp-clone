@@ -105,17 +105,20 @@ const CreateChatRoomButton = (props: any) => {
         nameChatRoom = nameChatRoom + "-" + ids[i];
       }
 
-      const chatRoom = await API.graphql(
-        graphqlOperation(chatRoomByName, {
-          name: nameChatRoom,
-        })
-      );
-      console.log(chatRoom);
-      try {
-        chatRoomID = chatRoom.data.chatRoomByName.items[0].id;
-      } catch {
-        console.log("Chatroom does not exist");
-        chatRoomID = null;
+      if (names.lenth == 1) {
+        const chatRoom = await API.graphql(
+          graphqlOperation(chatRoomByName, {
+            name: nameChatRoom,
+          })
+        );
+        console.log(nameChatRoom);
+        console.log(chatRoom);
+        try {
+          chatRoomID = chatRoom.data.chatRoomByName.items[0].id;
+        } catch {
+          console.log("Chatroom does not exist");
+          chatRoomID = null;
+        }
       }
 
       var displayNameChat;
