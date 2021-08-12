@@ -52,6 +52,7 @@ const ChatRoomScreen = (props) => {
   // ######################################
   var messageIndex = useRef(-1);
   var pace = useRef(1.0);
+  var isPlaying = useRef(false);
   // ######################################
 
   const myID = props.route.params.myID;
@@ -85,7 +86,12 @@ const ChatRoomScreen = (props) => {
 
   useEffect(() => {
     console.log("**********", messageIndex.current, messagesSoundObj.length);
-    if (!status.isPlaying && flashMessage == "Idle") {
+    if (
+      !status.isPlaying &&
+      !isPlaying.current &&
+      !status.isBuffering &&
+      flashMessage == "Idle"
+    ) {
       if (messageIndex.current < messagesSoundObj.length) {
         playMusic(
           messageIndex,
@@ -97,7 +103,7 @@ const ChatRoomScreen = (props) => {
         );
       }
     }
-  }, [messagesSoundObj, pendingMessageCount]);
+  }, [pendingMessageCount]);
 
   useEffect(() => {
     const subscription = API.graphql(
@@ -112,8 +118,7 @@ const ChatRoomScreen = (props) => {
 
         if (newMessage.userID !== myID) {
           await pushSoundObj(newMessage, setMessages, setMessagesSoundObj);
-          // setPendingMessageCount(pendingMessageCount + 1);
-          setPendingMessageCount((prevState) => prevState + 1);
+          await setPendingMessageCount((prevState) => prevState + 1);
         }
       },
     });
@@ -127,15 +132,16 @@ const ChatRoomScreen = (props) => {
     } else {
       setButtonType("play");
     }
+    isPlaying.current = inp.isPlaying;
     if (inp.durationMillis == null) {
-      setStatus((prevState) => ({
+      await setStatus((prevState) => ({
         ...prevState,
         isLoaded: inp.isLoaded,
         isBuffering: inp.isBuffering,
         isPlaying: inp.isPlaying,
       }));
     } else {
-      setStatus((prevState) => ({
+      await setStatus((prevState) => ({
         ...prevState,
         isLoaded: inp.isLoaded,
         durationMillis: inp.durationMillis,
@@ -145,7 +151,11 @@ const ChatRoomScreen = (props) => {
       }));
     }
     if (inp.didJustFinish) {
-      console.log(inp.didJustFinish, "+++++++++++++++++++++++++++++");
+      console.log(
+        inp.didJustFinish,
+        "+++++++++++++++++++++++++++++",
+        messageIndex.current
+      );
       await API.graphql(
         graphqlOperation(updateAudioMessage, {
           input: {
@@ -155,11 +165,47 @@ const ChatRoomScreen = (props) => {
         })
       );
 
-      if (messages[messageIndex.current].read == false) {
+      messageIndex.current = messageIndex.current + 1;
+      if (messages[messageIndex.current - 1].read == false) {
         await setPendingMessageCount((prevState) => prevState - 1);
       }
-      messageIndex.current = messageIndex.current + 1;
 
+      // if (messageIndex.current < messagesSoundObj.length) {
+      //   await playMusic(
+      //     messageIndex,
+      //     messagesSoundObj,
+      //     messages,
+      //     setSound,
+      //     setStatus,
+      //     onPlaybackStatusUpdate
+      //   );
+      // }
+    }
+  };
+
+  ///////////////////////////////// While Playing /////////////////////////////////
+
+  // ////////////////////////////// Controls //////////////////////////////////////
+  const nextMessage = async () => {
+    messageIndex.current = messageIndex.current + 1;
+
+    try {
+      await sound.stopAsync();
+    } catch (e) {
+      console.log("Nothing to stop");
+    }
+
+    if (messages[messageIndex.current - 1].read == false) {
+      await API.graphql(
+        graphqlOperation(updateAudioMessage, {
+          input: {
+            id: messages[messageIndex.current - 1].id,
+            read: true,
+          },
+        })
+      );
+      await setPendingMessageCount((prevState) => prevState - 1);
+    } else {
       if (messageIndex.current < messagesSoundObj.length) {
         await playMusic(
           messageIndex,
@@ -170,41 +216,6 @@ const ChatRoomScreen = (props) => {
           onPlaybackStatusUpdate
         );
       }
-    }
-  };
-
-  ///////////////////////////////// While Playing /////////////////////////////////
-
-  // ////////////////////////////// Controls //////////////////////////////////////
-  const nextMessage = async () => {
-    if (messages[messageIndex.current].read == false) {
-      await API.graphql(
-        graphqlOperation(updateAudioMessage, {
-          input: {
-            id: messages[messageIndex.current].id,
-            read: true,
-          },
-        })
-      );
-      setPendingMessageCount((prevState) => prevState - 1);
-    }
-
-    messageIndex.current = messageIndex.current + 1;
-    try {
-      await sound.stopAsync();
-    } catch (e) {
-      console.log("Nothing to stop");
-    }
-
-    if (messageIndex.current < messagesSoundObj.length) {
-      await playMusic(
-        messageIndex,
-        messagesSoundObj,
-        messages,
-        setSound,
-        setStatus,
-        onPlaybackStatusUpdate
-      );
     }
   };
 
