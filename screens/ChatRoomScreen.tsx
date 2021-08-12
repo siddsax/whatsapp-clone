@@ -64,7 +64,12 @@ const ChatRoomScreen = (props) => {
       messageIndex,
       setMessages,
       setMessagesSoundObj,
-      setPendingMessageCount
+      setPendingMessageCount,
+      messagesSoundObj,
+      messages,
+      setSound,
+      setStatus,
+      onPlaybackStatusUpdate
     );
 
     const members = [];
@@ -92,7 +97,7 @@ const ChatRoomScreen = (props) => {
         );
       }
     }
-  }, [messagesSoundObj]);
+  }, [messagesSoundObj, pendingMessageCount]);
 
   useEffect(() => {
     const subscription = API.graphql(

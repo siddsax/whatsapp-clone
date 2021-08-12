@@ -22,7 +22,12 @@ export const fetchMessages = async (
   messageIndex: any,
   setMessages: any,
   setMessagesSoundObj: any,
-  setPendingMessageCount: any
+  setPendingMessageCount: any,
+  messagesSoundObj: any,
+  messages: any,
+  setSound: any,
+  setStatus: any,
+  onPlaybackStatusUpdate: any
 ) => {
   const myID = route.params.myID;
 
@@ -58,24 +63,43 @@ export const fetchMessages = async (
   }
 
   await setPendingMessageCount(messagesMine.length - messageIndex.current);
+  if (messagesMine.length - messageIndex.current > 0) {
+    await setStatus((prevState: any) => ({
+      ...prevState,
+      isBuffering: true,
+    }));
+  }
   // When loading for first time, ones before messageIndex.current are read, hence dont need to be loaded
 
-  var soundObjects = [];
+  await setMessages(messagesMine);
 
   for (let i = 0; i < messagesMine.length; i++) {
     if (i < messageIndex.current) {
-      soundObjects.push(null);
+      await setMessagesSoundObj((prevState: any) => [...prevState, null]);
     } else {
       const uri = await Storage.get(messagesMine[i].content.key);
 
       const soundObject = new Audio.Sound();
       await soundObject.loadAsync({ uri: uri });
-      soundObjects.push(soundObject);
+      await setMessagesSoundObj((prevState: any) => [
+        ...prevState,
+        soundObject,
+      ]);
+      if (i == messageIndex.current) {
+        console.log("Now");
+        playMusic(
+          messageIndex,
+          messagesSoundObj,
+          messages,
+          setSound,
+          setStatus,
+          onPlaybackStatusUpdate
+        );
+      } else {
+        console.log("&");
+      }
     }
   }
-
-  await setMessages(messagesMine);
-  await setMessagesSoundObj(soundObjects);
 };
 
 export const playMusic = async (
