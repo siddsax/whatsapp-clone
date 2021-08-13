@@ -63,6 +63,10 @@ const InputBox = (props) => {
     const fetchUser = async () => {
       const userInfo = await Auth.currentAuthenticatedUser();
       setMyUserId(userInfo.attributes.sub);
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
     };
     fetchUser();
   }, []);
@@ -73,10 +77,6 @@ const InputBox = (props) => {
 
   const _onLongPress = async () => {
     try {
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
       setFlashMessage("Recording");
       const recording = new Audio.Recording();
       await recording.prepareToRecordAsync(RecordingOptions);
@@ -127,7 +127,12 @@ const InputBox = (props) => {
 
   const _onPressOut = async () => {
     setRecording(undefined);
-    await recording.stopAndUnloadAsync();
+    try {
+      await recording.stopAndUnloadAsync();
+    } catch (e) {
+      console.log("Recording abandandoned");
+      return;
+    }
     let recordingURI = recording.getURI();
     const response = await fetch(recordingURI);
     const blob = await response.blob();

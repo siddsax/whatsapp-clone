@@ -50,18 +50,6 @@ export default function ContactsScreen() {
       ) : (
         <Text></Text>
       )}
-      {/* <DialogInput
-        isDialogVisible={isDialogVisible}
-        title={"Chat Name"}
-        message={"Please enter Name for Group Chat (Non-Empty)"}
-        // hintInput={"HINT INPUT"}
-        submitInput={(inputText) => {
-          this.sendInput(inputText);
-        }}
-        closeDialog={() => {
-          this.showDialog(false);
-        }}
-      ></DialogInput> */}
       <FlatList
         style={{ width: "100%" }}
         data={users}
