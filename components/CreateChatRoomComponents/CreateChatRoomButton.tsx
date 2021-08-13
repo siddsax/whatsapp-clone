@@ -77,6 +77,8 @@ const CreateChatRoomButton = (props: any) => {
         listForQuery.push(val);
       }
 
+      console.log("Will do Q1");
+
       const usersChatRooms = await API.graphql(
         graphqlOperation(listUserChatRoomNName, {
           filter: {
@@ -84,6 +86,7 @@ const CreateChatRoomButton = (props: any) => {
           },
         })
       );
+      console.log("Q1 Done");
 
       var names = [];
       var ids = [];
@@ -105,14 +108,14 @@ const CreateChatRoomButton = (props: any) => {
         nameChatRoom = nameChatRoom + "-" + ids[i];
       }
 
-      if (names.lenth == 1) {
+      if (names.length == 1) {
+        console.log("Will do Q2");
         const chatRoom = await API.graphql(
           graphqlOperation(chatRoomByName, {
             name: nameChatRoom,
           })
         );
-        console.log(nameChatRoom);
-        console.log(chatRoom);
+        console.log("Q2 Done");
         try {
           chatRoomID = chatRoom.data.chatRoomByName.items[0].id;
         } catch {
@@ -123,7 +126,6 @@ const CreateChatRoomButton = (props: any) => {
 
       var displayNameChat;
       if (chatRoomID == null) {
-        console.log("*****************************");
         //  1. Create a new Chat Room
         if (imageUris.length > 1) {
           // ask for chat name
@@ -132,6 +134,7 @@ const CreateChatRoomButton = (props: any) => {
           displayNameChat = names[0];
         }
 
+        console.log("Will do Q3");
         const newChatRoomData = await API.graphql(
           graphqlOperation(createChatRoom, {
             input: {
@@ -142,6 +145,8 @@ const CreateChatRoomButton = (props: any) => {
           })
         );
 
+        console.log("Q3 Done");
+
         if (!newChatRoomData.data) {
           console.log(" Failed to create a chat room");
           return;
@@ -149,9 +154,21 @@ const CreateChatRoomButton = (props: any) => {
 
         const newChatRoom = newChatRoomData.data.createChatRoom;
 
+        console.log("For loop of Q4s + adding user");
+
+        //  3. Add authenticated user to the Chat Room
+        API.graphql(
+          graphqlOperation(createChatRoomUser, {
+            input: {
+              userID: userInfo.attributes.sub,
+              chatRoomID: newChatRoom.id,
+            },
+          })
+        );
+
         for (let i = 0; i < usersID.length; i++) {
           // 2. Add `user` to the Chat Room
-          await API.graphql(
+          API.graphql(
             graphqlOperation(createChatRoomUser, {
               input: {
                 userID: usersID[i],
@@ -160,15 +177,8 @@ const CreateChatRoomButton = (props: any) => {
             })
           );
         }
-        //  3. Add authenticated user to the Chat Room
-        await API.graphql(
-          graphqlOperation(createChatRoomUser, {
-            input: {
-              userID: userInfo.attributes.sub,
-              chatRoomID: newChatRoom.id,
-            },
-          })
-        );
+
+        console.log("All users Added");
 
         chatRoomID = newChatRoom.id;
       }
@@ -203,11 +213,8 @@ const CreateChatRoomButton = (props: any) => {
   };
   const handleOk = () => {
     if (chatName) {
-      console.log(chatName);
       setVisible(false);
       onClick();
-    } else {
-      console.log("**********");
     }
   };
 

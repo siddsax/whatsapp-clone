@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from "react";
 import { useRoute } from "@react-navigation/native";
 import { audioMessagesByChatRoom } from "../src/graphql/queries";
 import { API, graphqlOperation, Auth, Storage } from "aws-amplify";
@@ -27,7 +28,8 @@ export const fetchMessages = async (
   messages: any,
   setSound: any,
   setStatus: any,
-  onPlaybackStatusUpdate: any
+  onPlaybackStatusUpdate: any,
+  isPlaying: any
 ) => {
   const myID = route.params.myID;
 
@@ -57,8 +59,8 @@ export const fetchMessages = async (
       break;
     }
   }
+
   if (messageIndex.current == -1) {
-    // All messages have been read
     messageIndex.current = messagesMine.length;
   }
 
@@ -71,7 +73,7 @@ export const fetchMessages = async (
   }
   // When loading for first time, ones before messageIndex.current are read, hence dont need to be loaded
 
-  await setMessages(messagesMine);
+  setMessages(messagesMine);
 
   for (let i = 0; i < messagesMine.length; i++) {
     if (i < messageIndex.current) {
@@ -85,19 +87,6 @@ export const fetchMessages = async (
         ...prevState,
         soundObject,
       ]);
-      if (i == messageIndex.current) {
-        console.log("Now");
-        playMusic(
-          messageIndex,
-          messagesSoundObj,
-          messages,
-          setSound,
-          setStatus,
-          onPlaybackStatusUpdate
-        );
-      } else {
-        console.log("&");
-      }
     }
   }
 };
@@ -108,9 +97,11 @@ export const playMusic = async (
   messages: any,
   setSound: any,
   setStatus: any,
-  onPlaybackStatusUpdate: any
+  onPlaybackStatusUpdate: any,
+  isPlaying: any
 ) => {
   try {
+    isPlaying.current = true;
     await setStatus((prevState: any) => ({
       ...prevState,
       isBuffering: true,
@@ -118,27 +109,30 @@ export const playMusic = async (
     var sound = messagesSoundObj[messageIndex.current];
 
     if (sound == null) {
+      console.log(messageIndex.current);
       const uri = await Storage.get(messages[messageIndex.current].content.key);
 
       await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
       const { sound } = await Audio.Sound.createAsync({
         uri: uri,
       });
-      sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      await sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
       //   sound.setRateAsync(pace.current, true);
 
       await setSound(sound);
 
       await sound.playAsync();
     } else {
-      sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      await sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
       //   sound.setRateAsync(pace.current, true);
 
-      setSound(sound);
+      await setSound(sound);
 
-      sound.playAsync();
+      await sound.playAsync();
     }
+    // isPlaying.current = false;
   } catch (e) {
+    console.log(e);
     await setStatus((prevState: any) => ({
       ...prevState,
       isBuffering: false,

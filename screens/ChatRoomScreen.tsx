@@ -53,6 +53,7 @@ const ChatRoomScreen = (props) => {
   var messageIndex = useRef(-1);
   var pace = useRef(1.0);
   var isPlaying = useRef(false);
+  var firstRun = useRef(false);
   // ######################################
 
   const myID = props.route.params.myID;
@@ -70,7 +71,8 @@ const ChatRoomScreen = (props) => {
       messages,
       setSound,
       setStatus,
-      onPlaybackStatusUpdate
+      onPlaybackStatusUpdate,
+      isPlaying
     );
 
     const members = [];
@@ -85,25 +87,48 @@ const ChatRoomScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("**********", messageIndex.current, messagesSoundObj.length);
     if (
       !status.isPlaying &&
       !isPlaying.current &&
       !status.isBuffering &&
       flashMessage == "Idle"
     ) {
-      if (messageIndex.current < messagesSoundObj.length) {
+      if (
+        messageIndex.current < messagesSoundObj.length &&
+        messageIndex.current != -1
+      ) {
         playMusic(
           messageIndex,
           messagesSoundObj,
           messages,
           setSound,
           setStatus,
-          onPlaybackStatusUpdate
+          onPlaybackStatusUpdate,
+          isPlaying
         );
       }
     }
   }, [pendingMessageCount]);
+
+  useEffect(() => {
+    if (
+      messagesSoundObj.length > messageIndex.current &&
+      firstRun.current == false &&
+      messageIndex.current != -1
+    ) {
+      firstRun.current = true;
+
+      playMusic(
+        messageIndex,
+        messagesSoundObj,
+        messages,
+        setSound,
+        setStatus,
+        onPlaybackStatusUpdate,
+        isPlaying
+      );
+    }
+  }, [messagesSoundObj]);
 
   useEffect(() => {
     const subscription = API.graphql(
@@ -132,7 +157,6 @@ const ChatRoomScreen = (props) => {
     } else {
       setButtonType("play");
     }
-    isPlaying.current = inp.isPlaying;
     if (inp.durationMillis == null) {
       await setStatus((prevState) => ({
         ...prevState,
@@ -151,11 +175,6 @@ const ChatRoomScreen = (props) => {
       }));
     }
     if (inp.didJustFinish) {
-      console.log(
-        inp.didJustFinish,
-        "+++++++++++++++++++++++++++++",
-        messageIndex.current
-      );
       await API.graphql(
         graphqlOperation(updateAudioMessage, {
           input: {
@@ -166,6 +185,7 @@ const ChatRoomScreen = (props) => {
       );
 
       messageIndex.current = messageIndex.current + 1;
+      isPlaying.current = false;
       if (messages[messageIndex.current - 1].read == false) {
         await setPendingMessageCount((prevState) => prevState - 1);
       }
@@ -213,7 +233,8 @@ const ChatRoomScreen = (props) => {
           messages,
           setSound,
           setStatus,
-          onPlaybackStatusUpdate
+          onPlaybackStatusUpdate,
+          isPlaying
         );
       }
     }
@@ -234,7 +255,8 @@ const ChatRoomScreen = (props) => {
         messages,
         setSound,
         setStatus,
-        onPlaybackStatusUpdate
+        onPlaybackStatusUpdate,
+        isPlaying
       );
     }
   };
