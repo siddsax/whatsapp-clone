@@ -9,6 +9,7 @@ export const getUser = /* GraphQL */ `
       name
       imageUri
       status
+      token
       chatRoomUser {
         items {
           id

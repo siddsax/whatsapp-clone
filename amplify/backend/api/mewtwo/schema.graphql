@@ -3,6 +3,7 @@ type User @model {
   name: String!
   imageUri: String
   status: String
+  token: String
   chatRoomUser: [ChatRoomUser] @connection(keyName: "byUser", fields: ["id"])
 }
 

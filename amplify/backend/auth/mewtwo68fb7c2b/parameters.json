@@ -1,6 +1,6 @@
 {
     "identityPoolName": "mewtwo68fb7c2b_identitypool_68fb7c2b",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "mewtwo68fb7c2b",
     "userPoolName": "mewtwo68fb7c2b_userpool_68fb7c2b",
     "autoVerifiedAttributes": [

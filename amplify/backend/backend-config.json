@@ -1,34 +1,42 @@
 {
-  "api": {
-    "mewtwo": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "API_KEY",
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 365,
-              "description": "mewtwoKey"
+    "api": {
+        "mewtwo": {
+            "service": "AppSync",
+            "providerPlugin": "awscloudformation",
+            "output": {
+                "authConfig": {
+                    "defaultAuthentication": {
+                        "authenticationType": "API_KEY",
+                        "apiKeyConfig": {
+                            "apiKeyExpirationDays": 365,
+                            "description": "mewtwoKey"
+                        }
+                    },
+                    "additionalAuthenticationProviders": []
+                }
             }
-          },
-          "additionalAuthenticationProviders": []
         }
-      }
+    },
+    "auth": {
+        "mewtwo68fb7c2b": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [],
+            "customAuth": false
+        }
+    },
+    "storage": {
+        "s3b855f496": {
+            "service": "S3",
+            "providerPlugin": "awscloudformation"
+        }
+    },
+    "notifications": {
+        "MewTwo3KSRb": {
+            "service": "Pinpoint",
+            "channels": [
+                "FCM"
+            ]
+        }
     }
-  },
-  "auth": {
-    "mewtwo68fb7c2b": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false
-    }
-  },
-  "storage": {
-    "s3b855f496": {
-      "service": "S3",
-      "providerPlugin": "awscloudformation"
-    }
-  }
 }
