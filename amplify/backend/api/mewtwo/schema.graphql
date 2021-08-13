@@ -62,6 +62,7 @@ type audioMessage
   chatRoom: ChatRoom @connection(fields: ["chatRoomID"])
   read: Boolean
   content: S3Object
+  readerID: ID
 }
 
 type S3Object {

@@ -36,18 +36,15 @@ export const fetchMessages = async (
   const messagesData = await API.graphql(
     graphqlOperation(audioMessagesByChatRoom, {
       chatRoomID: route.params.id,
+      filter: {
+        readerID: {
+          eq: myID,
+        },
+      },
     })
   );
 
-  var allChatRoomMessages = messagesData.data.audioMessagesByChatRoom.items;
-  var messagesMine = [];
-
-  // Remove messages that are Read
-  for (let i = 0; i < allChatRoomMessages.length; i++) {
-    if (allChatRoomMessages[i].userID !== myID) {
-      messagesMine.push(allChatRoomMessages[i]);
-    }
-  }
+  var messagesMine = messagesData.data.audioMessagesByChatRoom.items;
   messagesMine.sort(
     (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
   );
@@ -109,7 +106,6 @@ export const playMusic = async (
     var sound = messagesSoundObj[messageIndex.current];
 
     if (sound == null) {
-      console.log(messageIndex.current);
       const uri = await Storage.get(messages[messageIndex.current].content.key);
 
       await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });

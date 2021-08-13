@@ -12,6 +12,7 @@ export const createUser = /* GraphQL */ `
       name
       imageUri
       status
+      token
       chatRoomUser {
         items {
           id
@@ -37,6 +38,7 @@ export const updateUser = /* GraphQL */ `
       name
       imageUri
       status
+      token
       chatRoomUser {
         items {
           id
@@ -62,6 +64,7 @@ export const deleteUser = /* GraphQL */ `
       name
       imageUri
       status
+      token
       chatRoomUser {
         items {
           id
@@ -91,6 +94,7 @@ export const createChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -114,6 +118,7 @@ export const createChatRoomUser = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -138,6 +143,7 @@ export const updateChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -161,6 +167,7 @@ export const updateChatRoomUser = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -185,6 +192,7 @@ export const deleteChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -208,6 +216,7 @@ export const deleteChatRoomUser = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -259,6 +268,7 @@ export const createChatRoom = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -276,6 +286,7 @@ export const createChatRoom = /* GraphQL */ `
           region
           key
         }
+        readerID
         updatedAt
       }
       createdAt
@@ -324,6 +335,7 @@ export const updateChatRoom = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -341,6 +353,7 @@ export const updateChatRoom = /* GraphQL */ `
           region
           key
         }
+        readerID
         updatedAt
       }
       createdAt
@@ -389,6 +402,7 @@ export const deleteChatRoom = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -406,6 +420,7 @@ export const deleteChatRoom = /* GraphQL */ `
           region
           key
         }
+        readerID
         updatedAt
       }
       createdAt
@@ -429,6 +444,7 @@ export const createMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -452,6 +468,7 @@ export const createMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -477,6 +494,7 @@ export const updateMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -500,6 +518,7 @@ export const updateMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -525,6 +544,7 @@ export const deleteMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -548,6 +568,7 @@ export const deleteMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -572,6 +593,7 @@ export const createAudioMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -595,6 +617,7 @@ export const createAudioMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -606,6 +629,7 @@ export const createAudioMessage = /* GraphQL */ `
         region
         key
       }
+      readerID
       updatedAt
     }
   }
@@ -625,6 +649,7 @@ export const updateAudioMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -648,6 +673,7 @@ export const updateAudioMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -659,6 +685,7 @@ export const updateAudioMessage = /* GraphQL */ `
         region
         key
       }
+      readerID
       updatedAt
     }
   }
@@ -678,6 +705,7 @@ export const deleteAudioMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -701,6 +729,7 @@ export const deleteAudioMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -712,6 +741,7 @@ export const deleteAudioMessage = /* GraphQL */ `
         region
         key
       }
+      readerID
       updatedAt
     }
   }

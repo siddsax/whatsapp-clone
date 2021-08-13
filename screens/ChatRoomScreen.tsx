@@ -179,6 +179,7 @@ const ChatRoomScreen = (props) => {
         graphqlOperation(updateAudioMessage, {
           input: {
             id: messages[messageIndex.current].id,
+            readerID: myID,
             read: true,
           },
         })
@@ -377,6 +378,7 @@ const ChatRoomScreen = (props) => {
           <InputBox
             chatRoomID={route.params.id}
             setFlashMessage={setFlashMessage}
+            otherUserIDs={route.params.otherUserIDs}
           />
         </View>
       </View>

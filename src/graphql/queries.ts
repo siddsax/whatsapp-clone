@@ -37,6 +37,7 @@ export const listUsers = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -58,6 +59,7 @@ export const getChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -81,6 +83,7 @@ export const getChatRoomUser = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -107,6 +110,7 @@ export const listChatRoomUsers = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -163,6 +167,7 @@ export const getChatRoom = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -180,6 +185,7 @@ export const getChatRoom = /* GraphQL */ `
           region
           key
         }
+        readerID
         updatedAt
       }
       createdAt
@@ -211,6 +217,7 @@ export const listChatRooms = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -233,6 +240,7 @@ export const getMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -256,6 +264,7 @@ export const getMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -283,6 +292,7 @@ export const listMessages = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -312,6 +322,7 @@ export const getAudioMessage = /* GraphQL */ `
         name
         imageUri
         status
+        token
         chatRoomUser {
           nextToken
         }
@@ -335,6 +346,7 @@ export const getAudioMessage = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -346,6 +358,7 @@ export const getAudioMessage = /* GraphQL */ `
         region
         key
       }
+      readerID
       updatedAt
     }
   }
@@ -367,6 +380,7 @@ export const listAudioMessages = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -384,6 +398,7 @@ export const listAudioMessages = /* GraphQL */ `
           region
           key
         }
+        readerID
         updatedAt
       }
       nextToken
@@ -422,6 +437,7 @@ export const chatRoomByName = /* GraphQL */ `
           userID
           chatRoomID
           read
+          readerID
           updatedAt
         }
         createdAt
@@ -459,6 +475,7 @@ export const messagesByChatRoom = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -503,6 +520,7 @@ export const audioMessagesByChatRoom = /* GraphQL */ `
           name
           imageUri
           status
+          token
           createdAt
           updatedAt
         }
@@ -520,6 +538,7 @@ export const audioMessagesByChatRoom = /* GraphQL */ `
           region
           key
         }
+        readerID
         updatedAt
       }
       nextToken

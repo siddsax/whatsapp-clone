@@ -48,8 +48,10 @@ const ChatListItem = (props: ChatListItemProps) => {
     console.log(otherUsers);
     console.log("====================");
     const imageUris = [];
+    const ids = [];
     for (let i = 0; i < otherUsers.length; i++) {
       imageUris.push(otherUsers[i].imageUri);
+      ids.push(otherUsers[i].id);
     }
 
     var name;
@@ -66,6 +68,7 @@ const ChatListItem = (props: ChatListItemProps) => {
       chatName: name,
       myID: thisUser,
       imageUris: imageUris,
+      otherUserIDs: ids,
     });
   };
 

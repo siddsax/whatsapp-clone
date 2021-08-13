@@ -189,6 +189,7 @@ const CreateChatRoomButton = (props: any) => {
         memberNames: names,
         myID: userInfo.attributes.sub,
         imageUris: imageUris,
+        otherUserIDs: ids,
       });
       setFlashMessage(false);
       setStateDisabled(false);

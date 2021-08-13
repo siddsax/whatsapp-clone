@@ -53,7 +53,7 @@ const RecordingOptions = {
 };
 
 const InputBox = (props) => {
-  const { chatRoomID, setFlashMessage } = props;
+  const { chatRoomID, setFlashMessage, otherUserIDs } = props;
 
   const [message, setMessage] = useState("");
   const [myUserId, setMyUserId] = useState(null);
@@ -103,23 +103,27 @@ const InputBox = (props) => {
   };
   const addAudioToDB = async (audioName) => {
     try {
-      const newMessageData = await API.graphql(
-        graphqlOperation(createAudioMessage, {
-          input: {
-            content: {
-              bucket: awsExports.aws_user_files_s3_bucket,
-              region: awsExports.aws_user_files_s3_bucket_region,
-              key: audioName,
+      for (let i = 0; i < otherUserIDs.length; i++) {
+        console.log(otherUserIDs[i]);
+        const newMessageData = API.graphql(
+          graphqlOperation(createAudioMessage, {
+            input: {
+              content: {
+                bucket: awsExports.aws_user_files_s3_bucket,
+                region: awsExports.aws_user_files_s3_bucket_region,
+                key: audioName,
+              },
+              userID: myUserId,
+              chatRoomID,
+              read: false,
+              readerID: otherUserIDs[i],
             },
-            userID: myUserId,
-            chatRoomID,
-            read: false,
-          },
-        })
-      );
-      await updateChatRoomLastMessage(
-        newMessageData.data.createAudioMessage.id
-      );
+          })
+        );
+      }
+      // await updateChatRoomLastMessage(
+      //   newMessageData.data.createAudioMessage.id
+      // );
     } catch (e) {
       console.log(e);
     }
