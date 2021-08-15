@@ -19,7 +19,11 @@ const styles = StyleSheet.create({
   avatar: {
     width: 60,
     height: 60,
-    borderRadius: 50,
+    borderTopRightRadius: 22,
+    borderTopLeftRadius: 22,
+    borderBottomRightRadius: 22,
+    borderBottomLeftRadius: 22,
+    //borderRadius: 50,
     marginRight: 15,
   },
   username: {

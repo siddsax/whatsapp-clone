@@ -180,7 +180,7 @@ const InputBox = (props) => {
               : styles.buttonContainerUnPressed,
           ]}
         >
-          <MaterialCommunityIcons name="microphone" size={28} color="white" />
+          <MaterialCommunityIcons name="microphone" size={28} color="black" />
         </Pressable>
       </View>
     </KeyboardAvoidingView>

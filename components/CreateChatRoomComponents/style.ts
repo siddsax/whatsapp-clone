@@ -35,7 +35,11 @@ const styles = StyleSheet.create({
   avatar: {
     width: 60,
     height: 60,
-    borderRadius: 50,
+    borderTopRightRadius: 22,
+    borderTopLeftRadius: 22,
+    borderBottomRightRadius: 22,
+    borderBottomLeftRadius: 22,
+    //borderRadius: 50,
     marginRight: 15,
   },
   username: {
@@ -55,15 +59,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     fontWeight: "bold",
-    backgroundColor: "green",
+    backgroundColor: "#fff4d9",
     // marginLeft: "30%",
     // marginRight: "30%",
     marginBottom: "10%",
     // marginTop: 10,
+    borderRadius: 30,
+
   },
   creatChatRoomText: {
     alignContent: "center",
     justifyContent: "center",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 

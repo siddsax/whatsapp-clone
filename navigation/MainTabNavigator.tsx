@@ -3,16 +3,13 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 
-import { Fontisto } from "@expo/vector-icons";
-
-import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
 import ChatsScreen from "../screens/ChatsScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
-import RecordScreen from "../screens/RecordScreen";
+
 import { MainTabParamList, TabOneParamList, TabTwoParamList } from "../types";
 // import { color } from "react-native-elements/dist/helpers";
 import color from "../constants/Colors";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 const MainTab = createMaterialTopTabNavigator<MainTabParamList>();
 
 export default function MainTabNavigator() {
@@ -25,15 +22,20 @@ export default function MainTabNavigator() {
         activeTintColor: "black", // Colors[colorScheme].background,
         style: {
           backgroundColor: color.CREAM_TOP, //Colors[colorScheme].tint,
+          //alignSelf: "center",
         },
         indicatorStyle: {
           backgroundColor: color.CREAM_TOP, //Colors[colorScheme].background,
-          height: 4,
+          height: 0,
         },
         labelStyle: {
           fontWeight: "bold",
+          textTransform: "none",
+          fontSize: 21,
         },
-        showIcon: true,
+
+
+        //showIcon: true,
       }}
     >
       {/* <MainTab.Screen

@@ -227,7 +227,7 @@ const CreateChatRoomButton = (props: any) => {
   return (
     <TouchableWithoutFeedback onPress={showDialog} disabled={stateDisabled}>
       <View style={styles.createChatRoomButtonContainer}>
-        <Text style={styles.creatChatRoomText}>Create ChatRoom</Text>
+        <Text style={styles.creatChatRoomText}>Create Chat Room</Text>
         <Dialog.Container visible={visible}>
           <Dialog.Title>Chat Name</Dialog.Title>
           <Dialog.Description>Set group chat name</Dialog.Description>

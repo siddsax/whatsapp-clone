@@ -7,6 +7,8 @@ const styles = StyleSheet.create({
     // margin: 10,
     // alignItems: "flex-end",
     justifyContent: "center",
+
+
   },
   mainContainer: {
     flexDirection: "row",
@@ -24,18 +26,9 @@ const styles = StyleSheet.create({
   icon: {
     marginHorizontal: 5,
   },
-  // buttonContainer: {
-  //   backgroundColor: Colors.light.tint,
-  //   borderRadius: 25,
-  //   width: 50,
-  //   height: 50,
-  //   margin: 10,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
   buttonContainerPressed: {
     backgroundColor: "red",
-    borderRadius: 25,
+    borderRadius: 30,
     width: 50,
     height: 50,
     // margin: 10,

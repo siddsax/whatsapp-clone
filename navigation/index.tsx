@@ -44,6 +44,7 @@ export default function Navigation({
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+
     >
       <RootNavigator />
     </NavigationContainer>
@@ -74,9 +75,12 @@ function RootNavigator() {
         headerTintColor: "black",
         headerTitleAlign: "left",
         headerTitleStyle: {
-          fontWeight: "bold",
+          //fontWeight: "bold",
           color: "black",
         },
+        cardStyle: {
+          backgroundColor: Colors.CREAM_TOP
+        }
       }}
     >
       <Stack.Screen
@@ -84,19 +88,20 @@ function RootNavigator() {
         component={MainTabNavigator}
         options={{
           title: "MewTwo",
+          headerTitleStyle: { fontSize: 25, },
           headerRight: () => (
             <View
               style={{
                 flexDirection: "row",
-                width: 60,
+                width: 30,
                 justifyContent: "space-between",
-                marginRight: 10,
+                marginRight: 5,
               }}
             >
               {/* <Octicons name="search" size={22} color={"white"} /> */}
               <TouchableHighlight
                 onPress={signOut} // style={styles.btnClickContain}
-                underlayColor="#042417"
+                underlayColor="burlywood"
               >
                 <View>
                   <MaterialCommunityIcons
@@ -104,15 +109,11 @@ function RootNavigator() {
                     name="logout"
                     size={22}
                     color={"black"}
+
                   />
                 </View>
               </TouchableHighlight>
 
-              {/* <MaterialCommunityIcons
-                name="dots-vertical"
-                size={22}
-                color={"white"}
-              /> */}
             </View>
           ),
         }}
@@ -131,7 +132,7 @@ function RootNavigator() {
                 marginRight: 10,
               }}
             >
-              <Image
+              {/*<Image
                 source={{ uri: route.params.imageUris[0] }}
                 style={styles.image}
               />
@@ -139,7 +140,7 @@ function RootNavigator() {
                 name="dots-vertical"
                 size={22}
                 color={"black"}
-              />
+              />*/}
             </View>
           ),
         })}

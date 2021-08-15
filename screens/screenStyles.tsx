@@ -18,22 +18,30 @@ export const styles = StyleSheet.create({
 
   pendingMessagesText: {
     fontWeight: "bold",
+    fontSize: 20,
+    //justifyContent: "space-around"
   },
   image: {
-    // justifyContent: "flex-start",
-    // flex: 1,
-    alignItems: "flex-start",
-    width: windowWidth * 0.2, //"20%",
-    height: windowWidth * 0.2, //"10%",
-    borderRadius: windowWidth * 0.1,
+    justifyContent: "space-evenly",
+    //flex: 1,
+    alignItems: "center",
+    //width: windowWidth * 0.2, //"20%",
+    //height: windowWidth * 0.2, //"10%",
+    width: 80,
+    height: 80,
+    //borderRadius: windowWidth * 0.1,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 30,
     borderWidth: 3,
     borderColor: "black",
-    backgroundColor: "red",
+    backgroundColor: "white",
   },
   clubhousePics: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
+    justifyContent: "center",
+    alignItems: "center",
   },
   clubhousePicsList: {
     flexDirection: "row",
@@ -58,39 +66,52 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
   },
   pendingMessagesBottomBar: {
-    backgroundColor: "red",
-    width: windowWidth * 0.06,
-    height: windowWidth * 0.06,
-    borderRadius: windowWidth * 0.03,
-    marginBottom: 15,
+    backgroundColor: Colors.CREAM_TOP,
+    //width: windowWidth * 0.06,
+    //height: windowWidth * 0.06,
+    height: 32,
+    width: 51,
+    borderBottomRightRadius: 24,
+    borderTopRightRadius: 24,
+    //borderRadius: windowWidth * 0.03,
     // marginLeft: "5%",
     // marginRight: "10%",
-    fontWeight: "bold",
+    marginBottom: "2%",
     alignItems: "center",
     justifyContent: "center",
   },
   slider: {
     width: "60%",
-    height: 40,
+    height: 30,
     marginLeft: "5%",
     marginRight: "5%",
     marginBottom: 5,
+
+
   },
 
   recordButton: {
-    marginLeft: 5,
+    height: 48,
+    width: 77,
+    borderTopLeftRadius: 24,
+    borderBottomLeftRadius: 24,
+    backgroundColor: Colors.CREAM_TOP,
+    //right: 0.01
+
+
   },
   paceBar: {
     justifyContent: "flex-start",
     marginBottom: 18,
     marginRight: 10,
     fontWeight: "bold",
+
   },
   // Bottom Bar ######################################
 
   // Navigation Bar ######################################
   audioNavigation: {
-    flex: 0,
+    //flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -117,5 +138,6 @@ export const styles = StyleSheet.create({
   flashMessageStyle: {
     fontWeight: "bold",
     color: "black",
+    fontSize: 20,
   },
 });

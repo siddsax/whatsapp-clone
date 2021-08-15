@@ -45,7 +45,7 @@ export default function ContactsScreen() {
     <View style={styles.container}>
       {flashMessage ? (
         <View style={styles.statusPopUp}>
-          <Text style={styles.flashMessageStyle}>{"Loading Chatroom"}</Text>
+          <Text style={styles.flashMessageStyle}>{"Loading Chatroom .."}</Text>
         </View>
       ) : (
         <Text></Text>
@@ -82,9 +82,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
   },
   statusPopUp: {
-    opacity: 0.5,
+    //opacity: 0.5,
     flexDirection: "row",
     alignContent: "center",
     justifyContent: "center",
@@ -92,11 +94,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.CREAM_TOP,
     marginLeft: "30%",
     marginRight: "30%",
-    marginBottom: 10,
-    marginTop: 10,
+    //marginBottom: 10,
+    marginTop: 20,
   },
   flashMessageStyle: {
     fontWeight: "bold",
     color: "black",
+    fontSize: 16,
   },
 });

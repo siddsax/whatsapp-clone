@@ -277,12 +277,12 @@ const ChatRoomScreen = (props) => {
   useEffect(() => {
     return sound
       ? () => {
-          sound.unloadAsync();
-          setStatus((prevState) => ({
-            ...prevState,
-            isBuffering: true,
-          }));
-        }
+        sound.unloadAsync();
+        setStatus((prevState) => ({
+          ...prevState,
+          isBuffering: true,
+        }));
+      }
       : undefined;
   }, [sound]);
 
@@ -298,7 +298,9 @@ const ChatRoomScreen = (props) => {
   };
 
   return (
-    <ImageBackground style={{ width: "100%", height: "100%" }} source={BG}>
+    <ImageBackground style={{ width: "100%", height: "100%" }}
+      imageStyle={{ borderTopRightRadius: 50, borderTopLeftRadius: 50 }}
+      source={BG}>
       <View style={styles.clubhousePics}>
         <View style={styles.clubhousePicsList}>{listProfiles()}</View>
       </View>
@@ -355,7 +357,7 @@ const ChatRoomScreen = (props) => {
       </View>
 
       <View style={styles.bottomBar}>
-        {pendingMessageCount != 0 ? (
+        {pendingMessageCount == 0 ? (
           <View style={styles.pendingMessagesBottomBar}>
             <Text style={styles.pendingMessagesText}>
               {pendingMessageCount}

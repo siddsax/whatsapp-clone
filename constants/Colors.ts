@@ -1,4 +1,4 @@
-const tintColorLight = "#0C6157";
+const tintColorLight = "#fff4d9";
 const tintColorDark = "#fff";
 
 export default {
@@ -23,5 +23,5 @@ export default {
   MODAL_BG: "rgba(0, 0, 0, 0.2)",
   ACTIVE_BG: "#5252ad",
   ACTIVE_FONT: "#fff",
-  CREAM_TOP: "#FFF6DE",
+  CREAM_TOP: "#fff4d9",
 };
