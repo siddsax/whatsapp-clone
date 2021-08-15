@@ -85,9 +85,20 @@ export const styles = StyleSheet.create({
     height: 30,
     marginLeft: "5%",
     marginRight: "5%",
-    marginBottom: 5,
-
-
+    marginBottom: 7,
+    color: "green",
+    alignItems: "center",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  sliderContainer: {
+    flex: 1,
+    marginBottom: 3,
+    flexDirection: "row",
+    // position: "absolute",
+    // alignItems: "center",
+    // justifyContent: "center",
+    // alignContent: "center",
   },
 
   recordButton: {
@@ -97,15 +108,12 @@ export const styles = StyleSheet.create({
     borderBottomLeftRadius: 24,
     backgroundColor: Colors.CREAM_TOP,
     //right: 0.01
-
-
   },
   paceBar: {
     justifyContent: "flex-start",
     marginBottom: 18,
     marginRight: 10,
     fontWeight: "bold",
-
   },
   // Bottom Bar ######################################
 

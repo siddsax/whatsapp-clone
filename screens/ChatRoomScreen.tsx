@@ -277,12 +277,12 @@ const ChatRoomScreen = (props) => {
   useEffect(() => {
     return sound
       ? () => {
-        sound.unloadAsync();
-        setStatus((prevState) => ({
-          ...prevState,
-          isBuffering: true,
-        }));
-      }
+          sound.unloadAsync();
+          setStatus((prevState) => ({
+            ...prevState,
+            isBuffering: true,
+          }));
+        }
       : undefined;
   }, [sound]);
 
@@ -297,10 +297,28 @@ const ChatRoomScreen = (props) => {
     });
   };
 
+  const sliderStyle = {
+    sliderDummy: {
+      backgroundColor: "#d3d3d3",
+      width: 230,
+      height: 30,
+      borderRadius: 50,
+      marginLeft: 22,
+      // position: "absolute",
+    },
+    sliderReal: {
+      backgroundColor: "#119EC2",
+      width: (status.audioProgress / 50) * 300,
+      height: 35,
+    },
+  };
+
   return (
-    <ImageBackground style={{ width: "100%", height: "100%" }}
+    <ImageBackground
+      style={{ width: "100%", height: "100%" }}
       imageStyle={{ borderTopRightRadius: 50, borderTopLeftRadius: 50 }}
-      source={BG}>
+      source={BG}
+    >
       <View style={styles.clubhousePics}>
         <View style={styles.clubhousePicsList}>{listProfiles()}</View>
       </View>
@@ -357,15 +375,9 @@ const ChatRoomScreen = (props) => {
       </View>
 
       <View style={styles.bottomBar}>
-        {pendingMessageCount == 0 ? (
-          <View style={styles.pendingMessagesBottomBar}>
-            <Text style={styles.pendingMessagesText}>
-              {pendingMessageCount}
-            </Text>
-          </View>
-        ) : (
-          <Text></Text>
-        )}
+        <View style={styles.pendingMessagesBottomBar}>
+          <Text style={styles.pendingMessagesText}>{pendingMessageCount}</Text>
+        </View>
         <Slider
           style={styles.slider}
           minimumValue={0}
@@ -374,7 +386,22 @@ const ChatRoomScreen = (props) => {
           maximumTrackTintColor="#000000"
           value={status.audioProgress}
           disabled={true}
+          // thumbImage={require("../assets/images/slider.jpeg")}
         />
+        {/* <View style={styles.sliderContainer}>
+          <View style={sliderStyle.sliderDummy}></View>
+          <View style={sliderStyle.sliderReal}></View>
+        </View>
+        <Slider
+          style={styles.slider} //{{ width: 300, height: 30, borderRadius: 50 }}
+          minimumValue={0}
+          maximumValue={1}
+          value={0}
+          // value={status.audioProgress}
+          // onValueChange={(value)=> this.setState({ slideValue: value}) }
+          maximumTrackTintColor="transparent"
+          minimumTrackTintColor="transparent"
+        /> */}
 
         <View style={styles.recordButton}>
           <InputBox

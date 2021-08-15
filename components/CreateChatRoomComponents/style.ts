@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     marginRight: "5%",
   },
   selectedCircle: {
-    backgroundColor: "green",
+    backgroundColor: "black",
     height: windowWidth * 0.05,
     width: windowWidth * 0.05,
     borderRadius: windowWidth * 0.025,
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     marginBottom: "10%",
     // marginTop: 10,
     borderRadius: 30,
-
   },
   creatChatRoomText: {
     alignContent: "center",

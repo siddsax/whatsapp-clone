@@ -43,8 +43,8 @@ export default function Navigation({
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-
+      theme={DefaultTheme}
+      // theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
       <RootNavigator />
     </NavigationContainer>
@@ -79,8 +79,8 @@ function RootNavigator() {
           color: "black",
         },
         cardStyle: {
-          backgroundColor: Colors.CREAM_TOP
-        }
+          backgroundColor: Colors.CREAM_TOP,
+        },
       }}
     >
       <Stack.Screen
@@ -88,7 +88,7 @@ function RootNavigator() {
         component={MainTabNavigator}
         options={{
           title: "MewTwo",
-          headerTitleStyle: { fontSize: 25, },
+          headerTitleStyle: { fontSize: 25 },
           headerRight: () => (
             <View
               style={{
@@ -109,11 +109,9 @@ function RootNavigator() {
                     name="logout"
                     size={22}
                     color={"black"}
-
                   />
                 </View>
               </TouchableHighlight>
-
             </View>
           ),
         }}
