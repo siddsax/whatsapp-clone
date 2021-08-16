@@ -115,6 +115,7 @@ export const createChatRoomUser = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -164,6 +165,7 @@ export const updateChatRoomUser = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -213,6 +215,7 @@ export const deleteChatRoomUser = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -261,6 +264,7 @@ export const createChatRoom = /* GraphQL */ `
       lastMessage {
         id
         createdAt
+        senderProfileURI
         userID
         chatRoomID
         user {
@@ -328,6 +332,7 @@ export const updateChatRoom = /* GraphQL */ `
       lastMessage {
         id
         createdAt
+        senderProfileURI
         userID
         chatRoomID
         user {
@@ -395,6 +400,7 @@ export const deleteChatRoom = /* GraphQL */ `
       lastMessage {
         id
         createdAt
+        senderProfileURI
         userID
         chatRoomID
         user {
@@ -465,6 +471,7 @@ export const createMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -515,6 +522,7 @@ export const updateMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -565,6 +573,7 @@ export const deleteMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -586,6 +595,7 @@ export const createAudioMessage = /* GraphQL */ `
     createAudioMessage(input: $input, condition: $condition) {
       id
       createdAt
+      senderProfileURI
       userID
       chatRoomID
       user {
@@ -614,6 +624,7 @@ export const createAudioMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -642,6 +653,7 @@ export const updateAudioMessage = /* GraphQL */ `
     updateAudioMessage(input: $input, condition: $condition) {
       id
       createdAt
+      senderProfileURI
       userID
       chatRoomID
       user {
@@ -670,6 +682,7 @@ export const updateAudioMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -698,6 +711,7 @@ export const deleteAudioMessage = /* GraphQL */ `
     deleteAudioMessage(input: $input, condition: $condition) {
       id
       createdAt
+      senderProfileURI
       userID
       chatRoomID
       user {
@@ -726,6 +740,7 @@ export const deleteAudioMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read

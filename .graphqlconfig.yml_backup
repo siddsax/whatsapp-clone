@@ -1,6 +1,6 @@
 projects:
   mewtwo:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/mewtwo/build/schema.graphql
     includes:
       - src/graphql/**/*.ts
     excludes:
@@ -10,3 +10,9 @@ projects:
         codeGenTarget: typescript
         generatedFileName: src/API.ts
         docsFilePath: src/graphql
+        region: us-east-2
+        apiId: null
+        maxDepth: 3
+extensions:
+  amplify:
+    version: 3

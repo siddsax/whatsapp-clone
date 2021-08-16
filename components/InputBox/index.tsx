@@ -28,7 +28,8 @@ import {
 import { Audio } from "expo-av";
 import awsExports from "../../aws-exports";
 import { showMessage, hideMessage } from "react-native-flash-message";
-
+import * as Notifications from "expo-notifications";
+import "../../global.js";
 const RecordingOptions = {
   ios: {
     extension: ".m4a",
@@ -53,15 +54,23 @@ const RecordingOptions = {
 };
 
 const InputBox = (props) => {
-  const { chatRoomID, setFlashMessage, otherUserIDs } = props;
+  const {
+    chatRoomID,
+    chatRoomName,
+    setFlashMessage,
+    otherUserIDs,
+    otherUserTokens,
+    myProfileURI,
+  } = props;
 
-  const [message, setMessage] = useState("");
+  const [userInfo, setUserInfo] = useState("");
   const [myUserId, setMyUserId] = useState(null);
   const [recording, setRecording] = useState();
 
   useEffect(() => {
     const fetchUser = async () => {
       const userInfo = await Auth.currentAuthenticatedUser();
+      setUserInfo(userInfo);
       setMyUserId(userInfo.attributes.sub);
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
@@ -101,10 +110,43 @@ const InputBox = (props) => {
       console.log(e);
     }
   };
+
+  async function schedulePushNotification() {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: "Here is the notification body",
+        data: { data: "goes here" },
+      },
+      trigger: { seconds: 2 },
+    });
+  }
+
+  async function sendPushNotification(expoPushToken, messageBody) {
+    const message = {
+      to: expoPushToken,
+      // to: "ExponentPushToken[azEzVGNuQs3x5IjgCG3yHT]",
+      sound: "default",
+      title: "Your friend wants to talk to you",
+      body: messageBody,
+      // data: { someData: 'goes here' },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  }
+
   const addAudioToDB = async (audioName) => {
     try {
       for (let i = 0; i < otherUserIDs.length; i++) {
-        console.log(otherUserIDs[i]);
+        // console.log(myProfileURI, "+++++++++");
         const newMessageData = API.graphql(
           graphqlOperation(createAudioMessage, {
             input: {
@@ -117,13 +159,23 @@ const InputBox = (props) => {
               chatRoomID,
               read: false,
               readerID: otherUserIDs[i],
+              senderProfileURI: global.userData.data.getUser.imageUri,
             },
           })
         );
+        var notificationMessage;
+        if (otherUserIDs.length > 1) {
+          notificationMessage = "You have recieved message in group ".concat(
+            chatRoomName
+          );
+        } else {
+          notificationMessage = "You have recieved message from ".concat(
+            userInfo.username
+          );
+        }
+
+        sendPushNotification(otherUserTokens[i], notificationMessage);
       }
-      // await updateChatRoomLastMessage(
-      //   newMessageData.data.createAudioMessage.id
-      // );
     } catch (e) {
       console.log(e);
     }
@@ -150,8 +202,11 @@ const InputBox = (props) => {
         ".m4a"
       );
 
-      setFlashMessage("Idle");
-      // setFlashMessage("Sending");
+      setFlashMessage("Sent");
+      setTimeout(() => {
+        setFlashMessage("Idle");
+      }, 1000);
+
       await Storage.put(audioName, blob).then((result) => {
         // setFlashMessage("Sent");
         addAudioToDB(audioName);

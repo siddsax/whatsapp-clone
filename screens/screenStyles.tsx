@@ -62,7 +62,7 @@ export const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "flex-end",
     flex: 0,
-    marginBottom: "10%",
+    marginBottom: "5%",
     flexDirection: "row",
   },
   pendingMessagesBottomBar: {
@@ -95,10 +95,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 3,
     flexDirection: "row",
-    // position: "absolute",
-    // alignItems: "center",
-    // justifyContent: "center",
-    // alignContent: "center",
   },
 
   recordButton: {
@@ -147,5 +143,35 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
     fontSize: 20,
+  },
+  messageFlatListContainer: {
+    alignItems: "flex-end",
+    alignContent: "flex-end",
+    flex: 0,
+    flexDirection: "row",
+    marginBottom: windowHeight * 0.02,
+    height: windowWidth * 0.2,
+  },
+  messageItem: {
+    borderRadius: windowWidth * 0.075,
+    margin: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imageFlatListMessage: {
+    width: windowWidth * 0.15,
+    height: windowWidth * 0.15,
+    borderRadius: windowWidth * 0.075,
+    borderColor: "black",
+    borderWidth: 3,
+    backgroundColor: "green",
+  },
+  imageFlatListMessageAttention: {
+    width: windowWidth * 0.15,
+    height: windowWidth * 0.15,
+    borderRadius: windowWidth * 0.075,
+    borderColor: "red",
+    borderWidth: 3,
+    backgroundColor: "green",
   },
 });

@@ -1,6 +1,6 @@
 {
     "identityPoolName": "mewtwo68fb7c2b_identitypool_68fb7c2b",
-    "allowUnauthenticatedIdentities": true,
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "mewtwo68fb7c2b",
     "userPoolName": "mewtwo68fb7c2b_userpool_68fb7c2b",
     "autoVerifiedAttributes": [
@@ -20,14 +20,11 @@
     "requiredAttributes": [
         "email"
     ],
+    "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [
-        "email"
-    ],
-    "userpoolClientReadAttributes": [
-        "email"
-    ],
+    "userpoolClientWriteAttributes": [],
+    "userpoolClientReadAttributes": [],
     "userpoolClientLambdaRole": "mewtwo68fb7c2b_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
     "sharedId": "68fb7c2b",
@@ -45,16 +42,14 @@
             "Arn"
         ]
     },
-    "useDefault": "defaultSocial",
-    "hostedUI": true,
-    "hostedUIDomainName": "mewtwo68fb7c2b-68fb7c2b",
-    "authProvidersUserPool": [
-        "Google"
-    ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"mewtwo://\"],\"LogoutURLs\":[\"mewtwo://\"]}",
+    "useDefault": "manual",
+    "hostedUI": false,
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "dependsOn": []
+    "dependsOn": [],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "thirdPartyAuth": false,
+    "authProviders": []
 }

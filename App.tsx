@@ -22,13 +22,13 @@ import * as WebBrowser from "expo-web-browser";
 import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "./registerForPushNotificationsAsync";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// });
 
 // Amplify.configure(config)
 Amplify.configure({
@@ -38,9 +38,14 @@ Amplify.configure({
   },
 });
 const randomImages = [
+  "https://hieumobile.com/wp-content/uploads/avatar-among-us-1.jpg",
   "https://hieumobile.com/wp-content/uploads/avatar-among-us-2.jpg",
   "https://hieumobile.com/wp-content/uploads/avatar-among-us-3.jpg",
+  "https://hieumobile.com/wp-content/uploads/avatar-among-us-4.jpg",
+  "https://hieumobile.com/wp-content/uploads/avatar-among-us-5.jpg",
   "https://hieumobile.com/wp-content/uploads/avatar-among-us-6.jpg",
+  "https://hieumobile.com/wp-content/uploads/avatar-among-us-7.jpg",
+  "https://hieumobile.com/wp-content/uploads/avatar-among-us-8.jpg",
   "https://hieumobile.com/wp-content/uploads/avatar-among-us-9.jpg",
 ];
 
@@ -65,17 +70,7 @@ const _handleNotificationResponse = (response: any) => {
   console.log(response);
 };
 
-function App(props) {
-  // const {
-  //   oAuthUser,
-  //   oAuthError,
-  //   hostedUISignIn,
-  //   facebookSignIn,
-  //   googleSignIn,
-  //   amazonSignIn,
-  //   customProviderSignIn,
-  //   signOut,
-  // } = props;
+function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
@@ -115,6 +110,8 @@ function App(props) {
           graphqlOperation(getUser, { id: userInfo.attributes.sub })
         );
 
+        console.log(userData.data.getUser);
+
         if (userData.data.getUser) {
           console.log("User is already registered in database");
           if (userData.data.getUser.token == null) {
@@ -134,14 +131,20 @@ function App(props) {
           return;
         }
 
-        var token = await registerForPushNotificationsAsync(true);
+        console.log("##########");
+        var tokenNew;
+        try {
+          tokenNew = await registerForPushNotificationsAsync(true);
+        } catch (e) {
+          tokenNew = null;
+        }
 
         const newUser = {
           id: userInfo.attributes.sub,
           name: userInfo.username,
           imageUri: getRandomImage(),
           status: "MewTwo is Hip",
-          token: token,
+          token: tokenNew,
         };
 
         await API.graphql(graphqlOperation(createUser, { input: newUser }));
@@ -152,71 +155,10 @@ function App(props) {
     fetchUser();
   }, []);
 
-  // useEffect(() => {
-  //   Hub.listen("auth", ({ payload: { event, data } }) => {
-  //     switch (event) {
-  //       case "signIn":
-  //         getUser().then((userData) => setUser(userData));
-  //         break;
-  //       case "signOut":
-  //         setUser(null);
-  //         break;
-  //       case "signIn_failure":
-  //       case "cognitoHostedUI_failure":
-  //         console.log("Sign in failure", data);
-  //         break;
-  //     }
-  //   });
-
-  //   getUser().then((userData) => setUser(userData));
-  // }, []);
-
-  // function getUser() {
-  //   return Auth.currentAuthenticatedUser()
-  //     .then((userData) => userData)
-  //     .catch(() => console.log("Not signed in"));
-  // }
-
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      // <View>
-      //   <Text>User: {user ? JSON.stringify(user.attributes) : "None"}</Text>
-      //   {user ? (
-      //     <Button title="Sign Out" onPress={() => Auth.signOut()} />
-      //   ) : (
-      //     <Button
-      //       title="Federated Sign In"
-      //       onPress={() => Auth.federatedSignIn()}
-      //     />
-      //   )}
-      // </View>
-
-      // <View style={{ marginTop: "30%" }}>
-      //   <Text>
-      //     User: {oAuthUser ? JSON.stringify(oAuthUser.attributes) : "None"}
-      //   </Text>
-      //   {oAuthUser ? (
-      //     <Button title="Sign Out" onPress={signOut} />
-      //   ) : (
-      //     <>
-      //       {/* Go to the Cognito Hosted UI */}
-      //       <Button title="Cognito" onPress={hostedUISignIn} />
-
-      //       {/* Go directly to a configured identity provider */}
-      //       <Button title="Facebook" onPress={facebookSignIn} />
-      //       <Button title="Google" onPress={googleSignIn} />
-      //       <Button title="Amazon" onPress={amazonSignIn} />
-
-      //       {/* e.g. for OIDC providers */}
-      //       <Button
-      //         title="Yahoo"
-      //         onPress={() => customProviderSignIn("Yahoo")}
-      //       />
-      //     </>
-      //   )}
-      // </View>
       <SafeAreaProvider>
         <Navigation colorScheme={colorScheme} />
         <StatusBar />
@@ -226,4 +168,3 @@ function App(props) {
 }
 
 export default withAuthenticator(App);
-// export default withOAuth(App);

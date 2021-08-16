@@ -1,5 +1,11 @@
 {
   "AppSyncApiName": "mewtwo",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authmewtwo68fb7c2b",
+      "Outputs.UserPoolId"
+    ]
+  }
 }

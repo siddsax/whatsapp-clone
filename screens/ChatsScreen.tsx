@@ -11,6 +11,7 @@ import { getUser } from "./queries";
 import { useIsFocused } from "@react-navigation/native";
 import Colors from "../constants/Colors";
 import { onCreateChatRoom } from "../src/graphql/subscriptions";
+import "../global.js";
 
 export default function ChatsScreen() {
   const [chatRooms, setChatRooms] = useState([]);
@@ -32,6 +33,8 @@ export default function ChatsScreen() {
       );
 
       var chats = userData.data.getUser.chatRoomUser.items;
+      console.log(userData.data.getUser.imageUri);
+      global.userData = userData;
       setChatRoomCount(chats.length);
       setChatRooms(chats);
     } catch (e) {

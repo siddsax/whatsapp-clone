@@ -80,6 +80,7 @@ export const getChatRoomUser = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -160,6 +161,7 @@ export const getChatRoom = /* GraphQL */ `
       lastMessage {
         id
         createdAt
+        senderProfileURI
         userID
         chatRoomID
         user {
@@ -214,6 +216,7 @@ export const listChatRooms = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -261,6 +264,7 @@ export const getMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -315,6 +319,7 @@ export const getAudioMessage = /* GraphQL */ `
     getAudioMessage(id: $id) {
       id
       createdAt
+      senderProfileURI
       userID
       chatRoomID
       user {
@@ -343,6 +348,7 @@ export const getAudioMessage = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -373,6 +379,7 @@ export const listAudioMessages = /* GraphQL */ `
       items {
         id
         createdAt
+        senderProfileURI
         userID
         chatRoomID
         user {
@@ -434,6 +441,7 @@ export const chatRoomByName = /* GraphQL */ `
         lastMessage {
           id
           createdAt
+          senderProfileURI
           userID
           chatRoomID
           read
@@ -513,6 +521,7 @@ export const audioMessagesByChatRoom = /* GraphQL */ `
       items {
         id
         createdAt
+        senderProfileURI
         userID
         chatRoomID
         user {

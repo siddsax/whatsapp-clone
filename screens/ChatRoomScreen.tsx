@@ -54,6 +54,7 @@ const ChatRoomScreen = (props) => {
   var pace = useRef(1.0);
   var isPlaying = useRef(false);
   var firstRun = useRef(false);
+  var messageFlatListRef = useRef(null);
   // ######################################
 
   const myID = props.route.params.myID;
@@ -109,6 +110,17 @@ const ChatRoomScreen = (props) => {
       }
     }
   }, [pendingMessageCount]);
+
+  useEffect(() => {
+    console.log(messageIndex.current, messages.length, "++++++++++++++");
+    if (messageIndex.current > 1) {
+      console.log("===");
+      messageFlatListRef.current.scrollToIndex({
+        animated: true,
+        index: messageIndex.current - 1,
+      });
+    }
+  }, [messageIndex.current]);
 
   useEffect(() => {
     if (
@@ -190,66 +202,39 @@ const ChatRoomScreen = (props) => {
       if (messages[messageIndex.current - 1].read == false) {
         await setPendingMessageCount((prevState) => prevState - 1);
       }
-
-      // if (messageIndex.current < messagesSoundObj.length) {
-      //   await playMusic(
-      //     messageIndex,
-      //     messagesSoundObj,
-      //     messages,
-      //     setSound,
-      //     setStatus,
-      //     onPlaybackStatusUpdate
-      //   );
-      // }
     }
   };
 
   ///////////////////////////////// While Playing /////////////////////////////////
 
   // ////////////////////////////// Controls //////////////////////////////////////
-  const nextMessage = async () => {
-    messageIndex.current = messageIndex.current + 1;
 
+  const chooseMessage = async (item: any) => {
     try {
       await sound.stopAsync();
     } catch (e) {
       console.log("Nothing to stop");
     }
 
-    if (messages[messageIndex.current - 1].read == false) {
-      await API.graphql(
-        graphqlOperation(updateAudioMessage, {
-          input: {
-            id: messages[messageIndex.current - 1].id,
-            read: true,
-          },
-        })
+    if (item.messageNumber > messageIndex.current) {
+      for (let i = messageIndex.current; i < item.messageNumber; i++) {
+        if (messages[i].read == false) {
+          API.graphql(
+            graphqlOperation(updateAudioMessage, {
+              input: {
+                id: messages[messageIndex.current - 1].id,
+                read: true,
+              },
+            })
+          );
+        }
+      }
+      messageIndex.current = item.messageNumber;
+      await setPendingMessageCount(
+        (prevState) => prevState - (item.messageNumber - messageIndex.current)
       );
-      await setPendingMessageCount((prevState) => prevState - 1);
     } else {
-      if (messageIndex.current < messagesSoundObj.length) {
-        await playMusic(
-          messageIndex,
-          messagesSoundObj,
-          messages,
-          setSound,
-          setStatus,
-          onPlaybackStatusUpdate,
-          isPlaying
-        );
-      }
-    }
-  };
-
-  const lastMessage = async () => {
-    if (messageIndex.current > 0) {
-      messageIndex.current = messageIndex.current - 1;
-      try {
-        await sound.stopAsync();
-      } catch (e) {
-        console.log("Nothing to stop");
-      }
-
+      messageIndex.current = item.messageNumber;
       await playMusic(
         messageIndex,
         messagesSoundObj,
@@ -261,6 +246,61 @@ const ChatRoomScreen = (props) => {
       );
     }
   };
+
+  // const nextMessage = async () => {
+  //   messageIndex.current = messageIndex.current + 1;
+
+  //   try {
+  //     await sound.stopAsync();
+  //   } catch (e) {
+  //     console.log("Nothing to stop");
+  //   }
+
+  //   if (messages[messageIndex.current - 1].read == false) {
+  //     API.graphql(
+  //       graphqlOperation(updateAudioMessage, {
+  //         input: {
+  //           id: messages[messageIndex.current - 1].id,
+  //           read: true,
+  //         },
+  //       })
+  //     );
+  //     await setPendingMessageCount((prevState) => prevState - 1);
+  //   } else {
+  //     if (messageIndex.current < messagesSoundObj.length) {
+  //       await playMusic(
+  //         messageIndex,
+  //         messagesSoundObj,
+  //         messages,
+  //         setSound,
+  //         setStatus,
+  //         onPlaybackStatusUpdate,
+  //         isPlaying
+  //       );
+  //     }
+  //   }
+  // };
+
+  // const lastMessage = async () => {
+  //   if (messageIndex.current > 0) {
+  //     messageIndex.current = messageIndex.current - 1;
+  //     try {
+  //       await sound.stopAsync();
+  //     } catch (e) {
+  //       console.log("Nothing to stop");
+  //     }
+
+  //     await playMusic(
+  //       messageIndex,
+  //       messagesSoundObj,
+  //       messages,
+  //       setSound,
+  //       setStatus,
+  //       onPlaybackStatusUpdate,
+  //       isPlaying
+  //     );
+  //   }
+  // };
 
   const changeMusicState = async () => {
     if (buttonType == "play") {
@@ -333,7 +373,7 @@ const ChatRoomScreen = (props) => {
         )}
       </View>
       <View style={styles.audioNavigation}>
-        <TouchableHighlight
+        {/* <TouchableHighlight
           onPress={lastMessage}
           underlayColor="#042417"
           style={styles.goBack}
@@ -345,7 +385,7 @@ const ChatRoomScreen = (props) => {
               color={colorButtons}
             />
           </View>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
         {status.isBuffering ? (
           <Text>
             <ActivityIndicator size={sizeButtons} color={colorButtons} />
@@ -359,7 +399,7 @@ const ChatRoomScreen = (props) => {
             />
           </TouchableHighlight>
         )}
-        <TouchableHighlight
+        {/* <TouchableHighlight
           onPress={nextMessage}
           underlayColor="#042417"
           style={styles.goAhead}
@@ -371,7 +411,7 @@ const ChatRoomScreen = (props) => {
               color={colorButtons}
             />
           </View>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
       </View>
 
       <View style={styles.bottomBar}>
@@ -386,30 +426,55 @@ const ChatRoomScreen = (props) => {
           maximumTrackTintColor="#000000"
           value={status.audioProgress}
           disabled={true}
-          // thumbImage={require("../assets/images/slider.jpeg")}
         />
-        {/* <View style={styles.sliderContainer}>
-          <View style={sliderStyle.sliderDummy}></View>
-          <View style={sliderStyle.sliderReal}></View>
-        </View>
-        <Slider
-          style={styles.slider} //{{ width: 300, height: 30, borderRadius: 50 }}
-          minimumValue={0}
-          maximumValue={1}
-          value={0}
-          // value={status.audioProgress}
-          // onValueChange={(value)=> this.setState({ slideValue: value}) }
-          maximumTrackTintColor="transparent"
-          minimumTrackTintColor="transparent"
-        /> */}
 
         <View style={styles.recordButton}>
           <InputBox
             chatRoomID={route.params.id}
+            chatRoomName={route.params.chatName}
             setFlashMessage={setFlashMessage}
             otherUserIDs={route.params.otherUserIDs}
+            otherUserTokens={route.params.otherUserTokens}
+            myProfileURI={route.params.imageUri}
           />
         </View>
+      </View>
+      <View style={styles.messageFlatListContainer}>
+        {messageIndex.current > 0 ? (
+          <FlatList
+            horizontal={true}
+            data={messages}
+            initialScrollIndex={messageIndex.current - 1}
+            ref={messageFlatListRef}
+            getItemLayout={(data, index) => ({
+              length: styles.imageFlatListMessage.height,
+              offset: styles.imageFlatListMessage.height * index,
+              index,
+            })}
+            renderItem={({ item, index, separators }) => (
+              <TouchableHighlight
+                key={item.id}
+                onPress={() => chooseMessage(item)}
+                onShowUnderlay={separators.highlight}
+                onHideUnderlay={separators.unhighlight}
+              >
+                <View style={styles.messageItem}>
+                  <Image
+                    source={{ uri: item.senderProfileURI }}
+                    style={
+                      index == messageIndex.current
+                        ? styles.imageFlatListMessageAttention
+                        : styles.imageFlatListMessage
+                    }
+                  />
+                </View>
+              </TouchableHighlight>
+            )}
+            keyExtractor={(item) => item.id}
+          />
+        ) : (
+          <></>
+        )}
       </View>
     </ImageBackground>
   );

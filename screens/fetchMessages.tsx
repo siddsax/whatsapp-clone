@@ -57,9 +57,14 @@ export const fetchMessages = async (
     }
   }
 
+  for (let i = 0; i < messagesMine.length; i++) {
+    messagesMine[i].messageNumber = i;
+  }
+
   if (messageIndex.current == -1) {
     messageIndex.current = messagesMine.length;
   }
+  await setMessages(messagesMine);
 
   await setPendingMessageCount(messagesMine.length - messageIndex.current);
   if (messagesMine.length - messageIndex.current > 0) {
@@ -69,8 +74,6 @@ export const fetchMessages = async (
     }));
   }
   // When loading for first time, ones before messageIndex.current are read, hence dont need to be loaded
-
-  setMessages(messagesMine);
 
   for (let i = 0; i < messagesMine.length; i++) {
     if (i < messageIndex.current) {

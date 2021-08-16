@@ -28,11 +28,11 @@ import {
 import { useEffect, useState } from "react";
 import Dialog from "react-native-dialog";
 
-const sortArrs = (arr1, arr2, arr3) => {
+const sortArrs = (arr1, arr2, arr3, arr4) => {
   //1) combine the arrays:
   var list = [];
   for (var j = 0; j < arr1.length; j++)
-    list.push({ arr1: arr1[j], arr2: arr2[j], arr3: arr3[j] });
+    list.push({ arr1: arr1[j], arr2: arr2[j], arr3: arr3[j], arr4: arr4[j] });
 
   //2) sort:
   list.sort(function (a, b) {
@@ -46,8 +46,9 @@ const sortArrs = (arr1, arr2, arr3) => {
     arr1[k] = list[k].arr1;
     arr2[k] = list[k].arr2;
     arr3[k] = list[k].arr3;
+    arr4[k] = list[k].arr4;
   }
-  return { arr1, arr2, arr3 };
+  return { arr1, arr2, arr3, arr4 };
 };
 const CreateChatRoomButton = (props: any) => {
   const { usersID, setFlashMessage, userInfo } = props;
@@ -91,17 +92,20 @@ const CreateChatRoomButton = (props: any) => {
       var names = [];
       var ids = [];
       var imageUris = [];
+      var otherUserTokens = [];
 
       for (let i = 0; i < usersChatRooms.data.listUsers.items.length; i++) {
         names.push(usersChatRooms.data.listUsers.items[i].name);
         ids.push(usersChatRooms.data.listUsers.items[i].id);
         imageUris.push(usersChatRooms.data.listUsers.items[i].imageUri);
+        otherUserTokens.push(usersChatRooms.data.listUsers.items[i].token);
       }
 
-      let output = sortArrs(ids, names, imageUris);
+      let output = sortArrs(ids, names, imageUris, otherUserTokens);
       ids = output.arr1;
       names = output.arr2;
       imageUris = output.arr3;
+      otherUserTokens = output.arr4;
 
       var nameChatRoom = userInfo.attributes.sub;
       for (let i = 0; i < usersChatRooms.data.listUsers.items.length; i++) {
@@ -190,6 +194,7 @@ const CreateChatRoomButton = (props: any) => {
         myID: userInfo.attributes.sub,
         imageUris: imageUris,
         otherUserIDs: ids,
+        otherUserTokens: otherUserTokens,
       });
       setFlashMessage(false);
       setStateDisabled(false);

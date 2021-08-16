@@ -572,6 +572,17 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
+          "name" : "token",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
           "name" : "chatRoomUser",
           "description" : null,
           "args" : [ {
@@ -1987,6 +1998,17 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
+          "name" : "senderProfileURI",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
           "name" : "userID",
           "description" : null,
           "args" : [ ],
@@ -2056,6 +2078,17 @@
           "type" : {
             "kind" : "OBJECT",
             "name" : "S3Object",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "readerID",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
             "ofType" : null
           },
           "isDeprecated" : false,
@@ -2203,6 +2236,15 @@
           "defaultValue" : null
         }, {
           "name" : "status",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "token",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -2423,6 +2465,15 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "senderProfileURI",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
           "name" : "userID",
           "description" : null,
           "type" : {
@@ -2446,6 +2497,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "readerID",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelIDInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -3082,6 +3142,15 @@
             "ofType" : null
           },
           "defaultValue" : null
+        }, {
+          "name" : "token",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
         } ],
         "interfaces" : null,
         "enumValues" : null,
@@ -3111,6 +3180,15 @@
           "defaultValue" : null
         }, {
           "name" : "status",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "token",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -3195,6 +3273,15 @@
           "defaultValue" : null
         }, {
           "name" : "status",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "token",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -3845,6 +3932,15 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "senderProfileURI",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
           "name" : "userID",
           "description" : null,
           "type" : {
@@ -3885,6 +3981,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "S3ObjectInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "readerID",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
@@ -3955,6 +4060,15 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "senderProfileURI",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
           "name" : "userID",
           "description" : null,
           "type" : {
@@ -3978,6 +4092,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelBooleanInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "readerID",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelIDInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -4048,6 +4171,15 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "senderProfileURI",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
           "name" : "userID",
           "description" : null,
           "type" : {
@@ -4080,6 +4212,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "S3ObjectInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "readerID",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
