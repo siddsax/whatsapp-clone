@@ -55,6 +55,7 @@ const ChatRoomScreen = (props) => {
   var isPlaying = useRef(false);
   var firstRun = useRef(false);
   var messageFlatListRef = useRef(null);
+  var playingOld = useRef(false);
   // ######################################
 
   const myID = props.route.params.myID;
@@ -99,7 +100,7 @@ const ChatRoomScreen = (props) => {
         messageIndex.current != -1
       ) {
         playMusic(
-          messageIndex,
+          messageIndex.current,
           messagesSoundObj,
           messages,
           setSound,
@@ -112,15 +113,23 @@ const ChatRoomScreen = (props) => {
   }, [pendingMessageCount]);
 
   useEffect(() => {
-    console.log(messageIndex.current, messages.length, "++++++++++++++");
-    if (messageIndex.current > 1) {
+    if (messageIndex.current > 1 && messageIndex.current < messages.length) {
       console.log("===");
+      messageFlatListRef.current.scrollToIndex({
+        animated: true,
+        index: messageIndex.current,
+      });
+    } else if (
+      messageIndex.current == messages.length &&
+      messageIndex.current != 0
+    ) {
+      console.log("111");
       messageFlatListRef.current.scrollToIndex({
         animated: true,
         index: messageIndex.current - 1,
       });
     }
-  }, [messageIndex.current]);
+  }, [messageIndex.current, pendingMessageCount]);
 
   useEffect(() => {
     if (
@@ -131,7 +140,7 @@ const ChatRoomScreen = (props) => {
       firstRun.current = true;
 
       playMusic(
-        messageIndex,
+        messageIndex.current,
         messagesSoundObj,
         messages,
         setSound,
@@ -187,20 +196,25 @@ const ChatRoomScreen = (props) => {
       }));
     }
     if (inp.didJustFinish) {
-      await API.graphql(
-        graphqlOperation(updateAudioMessage, {
-          input: {
-            id: messages[messageIndex.current].id,
-            readerID: myID,
-            read: true,
-          },
-        })
-      );
+      if (playingOld.current) {
+        playingOld.current = false;
+        isPlaying.current = false;
+      } else {
+        await API.graphql(
+          graphqlOperation(updateAudioMessage, {
+            input: {
+              id: messages[messageIndex.current].id,
+              readerID: myID,
+              read: true,
+            },
+          })
+        );
 
-      messageIndex.current = messageIndex.current + 1;
-      isPlaying.current = false;
-      if (messages[messageIndex.current - 1].read == false) {
-        await setPendingMessageCount((prevState) => prevState - 1);
+        messageIndex.current = messageIndex.current + 1;
+        isPlaying.current = false;
+        if (messages[messageIndex.current - 1].read == false) {
+          await setPendingMessageCount((prevState) => prevState - 1);
+        }
       }
     }
   };
@@ -234,9 +248,10 @@ const ChatRoomScreen = (props) => {
         (prevState) => prevState - (item.messageNumber - messageIndex.current)
       );
     } else {
-      messageIndex.current = item.messageNumber;
+      playingOld.current = true;
+      // messageIndex.current = item.messageNumber;
       await playMusic(
-        messageIndex,
+        item.messageNumber,
         messagesSoundObj,
         messages,
         setSound,
@@ -440,11 +455,13 @@ const ChatRoomScreen = (props) => {
         </View>
       </View>
       <View style={styles.messageFlatListContainer}>
-        {messageIndex.current > 0 ? (
+        {messageIndex.current > -1 ? (
           <FlatList
             horizontal={true}
             data={messages}
-            initialScrollIndex={messageIndex.current - 1}
+            initialScrollIndex={
+              messageIndex.current > 6 ? messageIndex.current - 1 : 0
+            }
             ref={messageFlatListRef}
             getItemLayout={(data, index) => ({
               length: styles.imageFlatListMessage.height,
@@ -455,8 +472,8 @@ const ChatRoomScreen = (props) => {
               <TouchableHighlight
                 key={item.id}
                 onPress={() => chooseMessage(item)}
-                onShowUnderlay={separators.highlight}
-                onHideUnderlay={separators.unhighlight}
+                // onShowUnderlay={separators.highlight}
+                // onHideUnderlay={separators.unhighlight}
               >
                 <View style={styles.messageItem}>
                   <Image

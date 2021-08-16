@@ -92,7 +92,7 @@ export const fetchMessages = async (
 };
 
 export const playMusic = async (
-  messageIndex: any,
+  messageIndexValue: any,
   messagesSoundObj: any,
   messages: any,
   setSound: any,
@@ -106,10 +106,22 @@ export const playMusic = async (
       ...prevState,
       isBuffering: true,
     }));
-    var sound = messagesSoundObj[messageIndex.current];
+    var sound = messagesSoundObj[messageIndexValue];
 
     if (sound == null) {
-      const uri = await Storage.get(messages[messageIndex.current].content.key);
+      var uri;
+      try {
+        uri = await Storage.get(messages[messageIndexValue].content.key);
+      } catch (e) {
+        console.log("@@@@@@@@@@@@@@@@");
+        console.log(e);
+        console.log(
+          messageIndexValue,
+          messages.length,
+          messagesSoundObj.length
+        );
+        console.log(messages[messageIndexValue]);
+      }
 
       await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
       const { sound } = await Audio.Sound.createAsync({
