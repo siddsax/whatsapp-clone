@@ -172,6 +172,12 @@ export const styles = StyleSheet.create({
     borderRadius: windowWidth * 0.075,
     borderColor: "red",
     borderWidth: 3,
-    backgroundColor: "green",
+  },
+  imageFlatListMessageSelected: {
+    width: windowWidth * 0.15,
+    height: windowWidth * 0.15,
+    borderRadius: windowWidth * 0.075,
+    borderColor: Colors.CREAM_TOP,
+    borderWidth: 3,
   },
 });

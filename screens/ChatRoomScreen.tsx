@@ -48,7 +48,7 @@ const ChatRoomScreen = (props) => {
   const [flashMessage, setFlashMessage] = useState("Idle");
   const [pendingMessageCount, setPendingMessageCount] = useState(0);
   const [members, setMembers] = useState([]);
-
+  const [playingNew, setPlayingNew] = useState(-1);
   // ######################################
   var messageIndex = useRef(-1);
   var pace = useRef(1.0);
@@ -89,16 +89,21 @@ const ChatRoomScreen = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log("********************************");
     if (
       !status.isPlaying &&
       !isPlaying.current &&
       !status.isBuffering &&
       flashMessage == "Idle"
     ) {
+      console.log("**************---------******************");
+
       if (
         messageIndex.current < messagesSoundObj.length &&
         messageIndex.current != -1
       ) {
+        console.log("***************++++++++++*****************");
+
         playMusic(
           messageIndex.current,
           messagesSoundObj,
@@ -110,7 +115,7 @@ const ChatRoomScreen = (props) => {
         );
       }
     }
-  }, [pendingMessageCount]);
+  }, [pendingMessageCount, playingNew]);
 
   useEffect(() => {
     if (messageIndex.current > 1 && messageIndex.current < messages.length) {
@@ -213,6 +218,12 @@ const ChatRoomScreen = (props) => {
 
         messageIndex.current = messageIndex.current + 1;
         isPlaying.current = false;
+
+        if (playingNew > -1) {
+          messages[playingNew].selected = false;
+          await setPlayingNew(-1);
+        }
+
         if (messages[messageIndex.current - 1].read == false) {
           await setPendingMessageCount((prevState) => prevState - 1);
         }
@@ -225,36 +236,67 @@ const ChatRoomScreen = (props) => {
   // ////////////////////////////// Controls //////////////////////////////////////
 
   const chooseMessage = async (item: any) => {
+    if (item.messageNumber == null) {
+      if (messageIndex.current == messages.length) {
+        item.messageNumber = messageIndex.current - 1;
+      } else {
+        item.messageNumber = messageIndex.current;
+      }
+    }
+
+    if (item.selected) {
+      return;
+    } else {
+      item.selected = true;
+    }
     try {
       await sound.stopAsync();
+      isPlaying.current = false;
+      if (playingOld.current > -1) {
+        messages[playingOld.current].selected = false;
+      }
+      playingOld.current = -1;
     } catch (e) {
       console.log("Nothing to stop");
     }
 
-    if (item.messageNumber == null) {
-      item.messageNumber = messageIndex.current - 1;
+    // for the cases when the last item in flatlist is selected. It returns null if its been just added
+
+    if (playingNew == item.messageNumber) {
+      return;
     }
 
-    item.selected = true;
-
-    if (item.messageNumber > messageIndex.current) {
+    if (item.messageNumber >= messageIndex.current) {
+      console.log(
+        "~!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        item.messageNumber,
+        messageIndex.current
+      );
       for (let i = messageIndex.current; i < item.messageNumber; i++) {
         if (messages[i].read == false) {
-          API.graphql(
+          await API.graphql(
             graphqlOperation(updateAudioMessage, {
               input: {
-                id: messages[messageIndex.current - 1].id,
+                id: messages[i].id,
                 read: true,
               },
             })
           );
         }
       }
+      console.log(playingNew, messageIndex.current, "000000000000");
       messageIndex.current = item.messageNumber;
+      await setPlayingNew(item.messageNumber);
+      console.log(playingNew, messageIndex.current, "11111111111");
       await setPendingMessageCount(
         (prevState) => prevState - (item.messageNumber - messageIndex.current)
       );
     } else {
+      if (playingNew > -1) {
+        messages[playingNew].selected = false;
+        await setPlayingNew(-1);
+      }
+
       playingOld.current = item.messageNumber;
       // messageIndex.current = item.messageNumber;
       await playMusic(
@@ -269,39 +311,39 @@ const ChatRoomScreen = (props) => {
     }
   };
 
-  // const nextMessage = async () => {
-  //   messageIndex.current = messageIndex.current + 1;
+  const nextMessage = async () => {
+    messageIndex.current = messageIndex.current + 1;
 
-  //   try {
-  //     await sound.stopAsync();
-  //   } catch (e) {
-  //     console.log("Nothing to stop");
-  //   }
+    try {
+      await sound.stopAsync();
+    } catch (e) {
+      console.log("Nothing to stop");
+    }
 
-  //   if (messages[messageIndex.current - 1].read == false) {
-  //     API.graphql(
-  //       graphqlOperation(updateAudioMessage, {
-  //         input: {
-  //           id: messages[messageIndex.current - 1].id,
-  //           read: true,
-  //         },
-  //       })
-  //     );
-  //     await setPendingMessageCount((prevState) => prevState - 1);
-  //   } else {
-  //     if (messageIndex.current < messagesSoundObj.length) {
-  //       await playMusic(
-  //         messageIndex,
-  //         messagesSoundObj,
-  //         messages,
-  //         setSound,
-  //         setStatus,
-  //         onPlaybackStatusUpdate,
-  //         isPlaying
-  //       );
-  //     }
-  //   }
-  // };
+    if (messages[messageIndex.current - 1].read == false) {
+      API.graphql(
+        graphqlOperation(updateAudioMessage, {
+          input: {
+            id: messages[messageIndex.current - 1].id,
+            read: true,
+          },
+        })
+      );
+      await setPendingMessageCount((prevState) => prevState - 1);
+    } else {
+      if (messageIndex.current < messagesSoundObj.length) {
+        await playMusic(
+          messageIndex,
+          messagesSoundObj,
+          messages,
+          setSound,
+          setStatus,
+          onPlaybackStatusUpdate,
+          isPlaying
+        );
+      }
+    }
+  };
 
   // const lastMessage = async () => {
   //   if (messageIndex.current > 0) {
@@ -349,6 +391,17 @@ const ChatRoomScreen = (props) => {
       : undefined;
   }, []);
 
+  const bottomImages = (item, index) => {
+    var style;
+    if (index == messageIndex.current) {
+      style = styles.imageFlatListMessageAttention;
+    } else if (item.selected) {
+      style = styles.imageFlatListMessageSelected;
+    } else {
+      style = styles.imageFlatListMessage;
+    }
+    return <Image source={{ uri: item.senderProfileURI }} style={style} />;
+  };
   const listProfiles = () => {
     return members.map((member) => {
       return (
@@ -472,26 +525,25 @@ const ChatRoomScreen = (props) => {
             }
             ref={messageFlatListRef}
             getItemLayout={(data, index) => ({
-              length: styles.imageFlatListMessage.height,
-              offset: styles.imageFlatListMessage.height * index,
+              length:
+                styles.imageFlatListMessage.height +
+                styles.messageItem.margin * 2,
+              offset:
+                (styles.imageFlatListMessage.height +
+                  styles.messageItem.margin * 2) *
+                index,
               index,
             })}
             renderItem={({ item, index, separators }) => (
               <TouchableHighlight
+                disabled={item.selected}
                 key={item.id}
                 onPress={() => chooseMessage(item)}
                 // onShowUnderlay={separators.highlight}
                 // onHideUnderlay={separators.unhighlight}
               >
                 <View style={styles.messageItem}>
-                  <Image
-                    source={{ uri: item.senderProfileURI }}
-                    style={
-                      index == messageIndex.current || item.selected
-                        ? styles.imageFlatListMessageAttention
-                        : styles.imageFlatListMessage
-                    }
-                  />
+                  {bottomImages(item, index)}
                 </View>
               </TouchableHighlight>
             )}
