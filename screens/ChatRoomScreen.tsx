@@ -55,7 +55,7 @@ const ChatRoomScreen = (props) => {
   var isPlaying = useRef(false);
   var firstRun = useRef(false);
   var messageFlatListRef = useRef(null);
-  var playingOld = useRef(false);
+  var playingOld = useRef(-1);
   // ######################################
 
   const myID = props.route.params.myID;
@@ -196,8 +196,9 @@ const ChatRoomScreen = (props) => {
       }));
     }
     if (inp.didJustFinish) {
-      if (playingOld.current) {
-        playingOld.current = false;
+      if (playingOld.current > -1) {
+        messages[playingOld.current].selected = false;
+        playingOld.current = -1;
         isPlaying.current = false;
       } else {
         await API.graphql(
@@ -230,6 +231,12 @@ const ChatRoomScreen = (props) => {
       console.log("Nothing to stop");
     }
 
+    if (item.messageNumber == null) {
+      item.messageNumber = messageIndex.current - 1;
+    }
+
+    item.selected = true;
+
     if (item.messageNumber > messageIndex.current) {
       for (let i = messageIndex.current; i < item.messageNumber; i++) {
         if (messages[i].read == false) {
@@ -248,7 +255,7 @@ const ChatRoomScreen = (props) => {
         (prevState) => prevState - (item.messageNumber - messageIndex.current)
       );
     } else {
-      playingOld.current = true;
+      playingOld.current = item.messageNumber;
       // messageIndex.current = item.messageNumber;
       await playMusic(
         item.messageNumber,
@@ -332,6 +339,7 @@ const ChatRoomScreen = (props) => {
   useEffect(() => {
     return sound
       ? () => {
+          console.log("--------- Unloading Sounds ----------");
           sound.unloadAsync();
           setStatus((prevState) => ({
             ...prevState,
@@ -339,7 +347,7 @@ const ChatRoomScreen = (props) => {
           }));
         }
       : undefined;
-  }, [sound]);
+  }, []);
 
   const listProfiles = () => {
     return members.map((member) => {
@@ -479,7 +487,7 @@ const ChatRoomScreen = (props) => {
                   <Image
                     source={{ uri: item.senderProfileURI }}
                     style={
-                      index == messageIndex.current
+                      index == messageIndex.current || item.selected
                         ? styles.imageFlatListMessageAttention
                         : styles.imageFlatListMessage
                     }
