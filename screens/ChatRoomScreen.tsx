@@ -162,7 +162,7 @@ const ChatRoomScreen = (props) => {
           return;
         }
 
-        if (newMessage.userID !== myID) {
+        if (newMessage.readerID == myID) {
           await pushSoundObj(newMessage, setMessages, setMessagesSoundObj);
           await setPendingMessageCount((prevState) => prevState + 1);
         }

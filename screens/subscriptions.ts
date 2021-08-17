@@ -6,6 +6,7 @@ export const onCreateAudioMessageShort = /* GraphQL */ `
       userID
       chatRoomID
       senderProfileURI
+      readerID
       #   user {
       #     id
       #     name
