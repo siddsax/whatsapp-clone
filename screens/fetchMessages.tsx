@@ -60,6 +60,7 @@ export const fetchMessages = async (
   for (let i = 0; i < messagesMine.length; i++) {
     messagesMine[i].messageNumber = i;
     messagesMine[i].selected = false;
+    messagesMine[i].disabled = false;
   }
 
   if (messageIndex.current == -1) {

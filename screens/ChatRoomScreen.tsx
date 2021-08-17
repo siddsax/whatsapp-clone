@@ -236,18 +236,20 @@ const ChatRoomScreen = (props) => {
   // ////////////////////////////// Controls //////////////////////////////////////
 
   const chooseMessage = async (item: any) => {
+    if (item.selected) {
+      return;
+    } else {
+      item.selected = true;
+    }
+    for (let i = 0; i < messages.length; i++) {
+      messages[i].disabled = true;
+    }
     if (item.messageNumber == null) {
       if (messageIndex.current == messages.length) {
         item.messageNumber = messageIndex.current - 1;
       } else {
         item.messageNumber = messageIndex.current;
       }
-    }
-
-    if (item.selected) {
-      return;
-    } else {
-      item.selected = true;
     }
     try {
       await sound.stopAsync();
@@ -308,6 +310,9 @@ const ChatRoomScreen = (props) => {
         onPlaybackStatusUpdate,
         isPlaying
       );
+    }
+    for (let i = 0; i < messages.length; i++) {
+      messages[i].disabled = false;
     }
   };
 
@@ -536,7 +541,7 @@ const ChatRoomScreen = (props) => {
             })}
             renderItem={({ item, index, separators }) => (
               <TouchableHighlight
-                disabled={item.selected}
+                disabled={item.disabled}
                 key={item.id}
                 onPress={() => chooseMessage(item)}
                 // onShowUnderlay={separators.highlight}
