@@ -13,7 +13,7 @@ import { createUser, updateUser } from "./src/graphql/mutations";
 
 import { withAuthenticator, withOAuth } from "aws-amplify-react-native";
 import Amplify from "aws-amplify";
-import config from "./aws-exports";
+import config from "./src/aws-exports";
 import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
 import { LogBox, Text, Button, View, Linking, Platform } from "react-native";
@@ -24,15 +24,7 @@ import * as WebBrowser from "expo-web-browser";
 import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "./registerForPushNotificationsAsync";
 import * as Updates from "expo-updates";
-// Notifications.setNotificationHandler({
-//   handleNotification: async () => ({
-//     shouldShowAlert: true,
-//     shouldPlaySound: false,
-//     shouldSetBadge: false,
-//   }),
-// });
 
-// Amplify.configure(config)
 Amplify.configure({
   ...config,
   Analytics: {
@@ -51,21 +43,8 @@ const randomImages = [
   "https://hieumobile.com/wp-content/uploads/avatar-among-us-9.jpg",
 ];
 
-// async function urlOpener(url, redirectUrl) {
-//   const { type, url: newUrl } = await WebBrowser.openAuthSessionAsync(
-//     url,
-//     redirectUrl
-//   );
-
-//   if (type === "success" && Platform.OS === "ios") {
-//     WebBrowser.dismissBrowser();
-//     return Linking.openURL(newUrl);
-//   }
-// }
-
 const _handleNotification = (notification: any) => {
   console.log(notification);
-  // this.setState({ notification: notification });
 };
 
 const _handleNotificationResponse = (response: any) => {
