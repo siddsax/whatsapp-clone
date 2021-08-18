@@ -18,10 +18,12 @@ import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
 import { LogBox, Text, Button, View, Linking, Platform } from "react-native";
 LogBox.ignoreLogs(["Setting a timer"]);
+LogBox.ignoreLogs(["Notification registration failed"]);
+
 import * as WebBrowser from "expo-web-browser";
 import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "./registerForPushNotificationsAsync";
-
+import * as Updates from "expo-updates";
 // Notifications.setNotificationHandler({
 //   handleNotification: async () => ({
 //     shouldShowAlert: true,
@@ -74,9 +76,18 @@ function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
-  //  Notification ////////////////////
-
-  ///////////////////////////////////
+  const checForUpdate = async () => {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        // ... notify user of update ...
+        await Updates.reloadAsync();
+      }
+    } catch (e) {
+      // handle or log error
+    }
+  };
 
   const getRandomImage = () => {
     return randomImages[Math.floor(Math.random() * randomImages.length)];
@@ -86,7 +97,6 @@ function App() {
   useEffect(() => {
     const askAudioPermission = async () => {
       const permission = await Audio.getPermissionsAsync();
-      console.log(permission);
       if (!permission.granted) {
         await Audio.requestPermissionsAsync();
       }
@@ -109,8 +119,6 @@ function App() {
         const userData = await API.graphql(
           graphqlOperation(getUser, { id: userInfo.attributes.sub })
         );
-
-        console.log(userData.data.getUser);
 
         if (userData.data.getUser) {
           console.log("User is already registered in database");
@@ -151,6 +159,7 @@ function App() {
       }
     };
 
+    checForUpdate();
     askAudioPermission();
     fetchUser();
   }, []);

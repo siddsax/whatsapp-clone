@@ -26,6 +26,7 @@ import { onCreateAudioMessageShort } from "./subscriptions";
 import { updateAudioMessage } from "../src/graphql/mutations";
 
 import { useRoute } from "@react-navigation/native";
+// import BG from "../assets/images/background.png";
 import BG from "../assets/images/background.png";
 import InputBox from "../components/InputBox";
 import { Audio, Video, AVPlaybackStatus } from "expo-av";
