@@ -26,7 +26,8 @@ import {
   Fontisto,
 } from "@expo/vector-icons";
 import { Audio } from "expo-av";
-import awsExports from "../../aws-exports";
+// import awsExports from "../../aws-exports";
+import { awsExports } from "../../aws-exports";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as Notifications from "expo-notifications";
 import "../../global.js";
@@ -146,35 +147,40 @@ const InputBox = (props) => {
   const addAudioToDB = async (audioName) => {
     try {
       for (let i = 0; i < otherUserIDs.length; i++) {
-        // console.log(myProfileURI, "+++++++++");
-        const newMessageData = API.graphql(
-          graphqlOperation(createAudioMessage, {
-            input: {
-              content: {
-                bucket: awsExports.aws_user_files_s3_bucket,
-                region: awsExports.aws_user_files_s3_bucket_region,
-                key: audioName,
+        //   // console.log(myProfileURI, "+++++++++");
+        try {
+          const newMessageData = API.graphql(
+            graphqlOperation(createAudioMessage, {
+              input: {
+                content: {
+                  bucket: awsExports.aws_user_files_s3_bucket,
+                  region: awsExports.aws_user_files_s3_bucket_region,
+                  key: audioName,
+                },
+                userID: myUserId,
+                chatRoomID,
+                read: false,
+                readerID: otherUserIDs[i],
+                senderProfileURI: global.userData.data.getUser.imageUri,
               },
-              userID: myUserId,
-              chatRoomID,
-              read: false,
-              readerID: otherUserIDs[i],
-              senderProfileURI: global.userData.data.getUser.imageUri,
-            },
-          })
-        );
-        var notificationMessage;
-        if (otherUserIDs.length > 1) {
-          notificationMessage = "You have recieved message in group ".concat(
-            chatRoomName
+            })
           );
-        } else {
-          notificationMessage = "You have recieved message from ".concat(
-            userInfo.username
-          );
+        } catch (e) {
+          console.log("_________________");
+          console.log(e);
         }
+        //   var notificationMessage;
+        //   if (otherUserIDs.length > 1) {
+        //     notificationMessage = "You have recieved message in group ".concat(
+        //       chatRoomName
+        //     );
+        //   } else {
+        //     notificationMessage = "You have recieved message from ".concat(
+        //       userInfo.username
+        //     );
+        //   }
 
-        sendPushNotification(otherUserTokens[i], notificationMessage);
+        //   sendPushNotification(otherUserTokens[i], notificationMessage);
       }
     } catch (e) {
       console.log(e);

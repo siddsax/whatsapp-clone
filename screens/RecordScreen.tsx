@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { getUser } from "./queries";
 import { useIsFocused } from "@react-navigation/native";
 import { Audio } from "expo-av";
-import awsExports from "../aws-exports";
+import { awsExports } from "../aws-exports";
 import { createAudioMessage } from "../src/graphql/mutations";
 
 export default function RecordScreen() {
